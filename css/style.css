@@ -1,11 +1,12 @@
 :root {
-    --background: #f4f7fb;
+    --background: #fff5f8;
     --surface: #ffffff;
-    --text: #182235;
-    --muted: #5f6f85;
-    --border: #d9e2ee;
-    --accent: #2868c7;
-    --accent-dark: #174b91;
+    --text: #321a26;
+    --muted: #745563;
+    --border: #f0d5df;
+    --accent: #c32f6c;
+    --accent-dark: #8f1d4d;
+    --bar: #d9578b;
 }
 
 * {
@@ -130,7 +131,7 @@ p {
 }
 
 .bar {
-    fill: steelblue;
+    fill: var(--bar);
 }
 
 .bar:hover {
