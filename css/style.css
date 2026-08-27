@@ -1,0 +1,172 @@
+:root {
+    --background: #f4f7fb;
+    --surface: #ffffff;
+    --text: #182235;
+    --muted: #5f6f85;
+    --border: #d9e2ee;
+    --accent: #2868c7;
+    --accent-dark: #174b91;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    color: var(--text);
+    background: var(--background);
+    font-family: Arial, sans-serif;
+}
+
+.page-container {
+    width: min(1000px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 56px 0 72px;
+}
+
+.site-header {
+    margin-bottom: 30px;
+}
+
+h1,
+h2,
+p {
+    margin-top: 0;
+}
+
+h1 {
+    margin-bottom: 14px;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    line-height: 1.1;
+}
+
+h2 {
+    margin-bottom: 12px;
+    font-size: 1.75rem;
+}
+
+p {
+    line-height: 1.6;
+}
+
+.course-label,
+.section-label {
+    margin-bottom: 10px;
+    color: var(--accent);
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.site-description,
+.chart-description,
+.content-card > p:not(.course-label, .section-label) {
+    color: var(--muted);
+}
+
+.lab-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 30px 0;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+}
+
+.lab-nav a {
+    padding: 9px 14px;
+    color: var(--text);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    text-decoration: none;
+}
+
+.lab-nav a:hover,
+.lab-nav a:focus-visible {
+    color: #ffffff;
+    background: var(--accent-dark);
+    border-color: var(--accent-dark);
+}
+
+.content-card {
+    padding: clamp(24px, 5vw, 44px);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: 0 14px 36px rgba(36, 57, 86, 0.08);
+}
+
+.primary-link,
+.back-link {
+    color: var(--accent-dark);
+    font-weight: 700;
+}
+
+.primary-link {
+    display: inline-block;
+    margin-top: 8px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 24px;
+    text-decoration: none;
+}
+
+#chart {
+    margin-top: 30px;
+    overflow-x: auto;
+}
+
+#chart svg {
+    display: block;
+    width: 100%;
+    min-width: 700px;
+    height: auto;
+}
+
+.bar {
+    fill: steelblue;
+}
+
+.bar:hover {
+    fill: var(--accent-dark);
+}
+
+.name-label,
+.score-label {
+    text-anchor: middle;
+}
+
+.name-label {
+    fill: var(--text);
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.score-label {
+    fill: var(--muted);
+    font-size: 14px;
+}
+
+.error-message {
+    padding: 14px;
+    color: #8b1e1e;
+    background: #fff1f1;
+    border: 1px solid #efc2c2;
+    border-radius: 6px;
+}
+
+.placeholder-card {
+    max-width: 680px;
+}
+
+@media (max-width: 640px) {
+    .page-container {
+        padding-top: 32px;
+    }
+}
