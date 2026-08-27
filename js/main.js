@@ -27,6 +27,38 @@ async function createStudentScoreChart() {
             .attr("role", "img")
             .attr("aria-labelledby", "chart-title chart-description");
 
+        const tooltip = chart
+            .append("div")
+            .attr("class", "chart-tooltip")
+            .attr("role", "tooltip")
+            .attr("aria-hidden", "true");
+
+        function showTooltip(event, d) {
+            const chartBounds = chart.node().getBoundingClientRect();
+
+            tooltip
+                .html(`<strong>${d.name}</strong><span>Score: ${d.score}</span>`)
+                .style("left", `${event.clientX - chartBounds.left + chart.node().scrollLeft}px`)
+                .style("top", `${event.clientY - chartBounds.top + chart.node().scrollTop}px`)
+                .attr("aria-hidden", "false")
+                .classed("visible", true);
+        }
+
+        function hideTooltip() {
+            tooltip
+                .attr("aria-hidden", "true")
+                .classed("visible", false);
+        }
+
+        function showFocusedTooltip(event, d) {
+            const barBounds = event.currentTarget.getBoundingClientRect();
+
+            showTooltip({
+                clientX: barBounds.left + barBounds.width / 2,
+                clientY: barBounds.top
+            }, d);
+        }
+
         svg.append("title")
             .attr("id", "chart-title")
             .text("Student Scores");
@@ -39,11 +71,18 @@ async function createStudentScoreChart() {
             .data(data)
             .join("rect")
             .attr("class", "bar")
+            .attr("tabindex", 0)
+            .attr("aria-label", d => `${d.name}: ${d.score}`)
             .attr("x", d => x(d.name))
             .attr("y", d => y(d.score))
             .attr("width", x.bandwidth())
             .attr("height", d => baseline - y(d.score))
-            .attr("rx", 4);
+            .attr("rx", 4)
+            .on("pointerenter", showTooltip)
+            .on("pointermove", showTooltip)
+            .on("pointerleave", hideTooltip)
+            .on("focus", showFocusedTooltip)
+            .on("blur", hideTooltip);
 
         svg.selectAll(".name-label")
             .data(data)

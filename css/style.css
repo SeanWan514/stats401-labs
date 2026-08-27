@@ -119,6 +119,7 @@ p {
 }
 
 #chart {
+    position: relative;
     margin-top: 30px;
     overflow-x: auto;
 }
@@ -132,10 +133,40 @@ p {
 
 .bar {
     fill: var(--bar);
+    cursor: pointer;
+    transition: fill 160ms ease, opacity 160ms ease;
 }
 
-.bar:hover {
+.bar:hover,
+.bar:focus {
     fill: var(--accent-dark);
+    outline: none;
+}
+
+.chart-tooltip {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    min-width: 112px;
+    padding: 10px 12px;
+    color: #ffffff;
+    background: var(--accent-dark);
+    border-radius: 7px;
+    box-shadow: 0 8px 22px rgba(80, 13, 43, 0.22);
+    opacity: 0;
+    pointer-events: none;
+    transform: translate(-50%, calc(-100% - 12px));
+    transition: opacity 120ms ease;
+}
+
+.chart-tooltip.visible {
+    opacity: 1;
+}
+
+.chart-tooltip span {
+    font-size: 0.88rem;
 }
 
 .name-label,
