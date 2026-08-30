@@ -32,10 +32,10 @@
             </p>
 
             <div class="encoding-summary" aria-label="Visual encoding summary">
-                <span><strong>X-position</strong> Population</span>
-                <span><strong>Y-position</strong> Temperature</span>
-                <span><strong>Size</strong> Development level</span>
-                <span><strong>Color + shape</strong> Region</span>
+                <span><strong>X-axis</strong> Population (millions)</span>
+                <span><strong>Y-axis</strong> Temperature (°C)</span>
+                <span><strong>Symbol size</strong> Development level (Low/Medium/High)</span>
+                <span><strong>Color and shape</strong> Region (N/S/E/W)</span>
             </div>
 
             <div id="city-scatterplot" class="visualization-shell" aria-live="polite"></div>
@@ -48,20 +48,21 @@
             <p class="section-label">Design Notes</p>
             <h2 id="design-justification-title">Design Justification</h2>
             <p>
-                Population is mapped to horizontal position because it is ratio data, so a
-                zero-based quantitative axis supports meaningful comparisons of city size.
-                Average temperature is mapped to vertical position; position along a shared
-                scale makes differences in this interval variable easy to compare. Development
-                level is ordinal, so symbol area increases consistently from Low to Medium to
-                High without suggesting an unsupported numeric distance between categories.
-                Region is nominal and is represented redundantly by both color and shape:
-                North uses blue circles, South coral triangles, East green squares, and West
-                purple diamonds. This combination separates regions without implying rank and
-                keeps them distinguishable when color alone is difficult to perceive. Direct
-                city labels support quick identification, while interactive tooltips provide
-                every exact value. Together, these encodings let viewers examine the relationship
-                between population and temperature, compare development levels, and look for
-                regional clusters or exceptions across all twelve cities.
+                Upon viewing the dataset, I noticed an apparent relationship between average
+                temperature and population, so I created a scatterplot that allows viewers to
+                explore that relationship while also seeing development level and region. I
+                mapped population to the x-axis and average temperature to the y-axis because
+                position along shared quantitative scales supports clear comparisons between
+                cities. Development level is represented by symbol size: Low, Medium, and High
+                appear as progressively larger marks, which communicates the category order
+                intuitively. Region is represented by both color and shape. I chose this
+                combination because shape provides another way to distinguish regions when
+                color differences are difficult to perceive. It also makes the four regional
+                groups clearer than color alone. Direct labels identify the cities, and the
+                interactive tooltips provide their exact values. Together, these encodings let
+                viewers examine the relationship between population and temperature, compare
+                development levels, and look for regional clusters or exceptions across all
+                twelve cities.
             </p>
         </section>
     </main>
