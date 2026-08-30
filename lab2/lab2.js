@@ -45,7 +45,7 @@ async function createCityScatterplot() {
             d3.symbolSquare,
             d3.symbolDiamond
         ]);
-        const symbolArea = d3.scaleOrdinal(developmentLevels, [150, 280, 430]);
+        const symbolArea = d3.scaleOrdinal(developmentLevels, [120, 300, 540]);
         const labelOffsets = new Map([
             ["Aurora", { x: -14, y: 18, anchor: "end" }],
             ["Kingston", { x: 14, y: -10, anchor: "start" }]
