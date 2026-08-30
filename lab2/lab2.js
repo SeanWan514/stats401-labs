@@ -1,5 +1,5 @@
-async function createCityMatrix() {
-    const container = d3.select("#city-matrix");
+async function createCityScatterplot() {
+    const container = d3.select("#city-scatterplot");
 
     try {
         const data = await d3.csv("../data/cities_multivariate.csv", d => ({
@@ -29,60 +29,51 @@ async function createCityMatrix() {
         }
 
         const width = 940;
-        const height = 690;
-        const margin = { top: 100, right: 34, bottom: 190, left: 120 };
+        const height = 610;
+        const margin = { top: 54, right: 230, bottom: 82, left: 86 };
         const regions = ["North", "South", "East", "West"];
-        const developmentLevels = ["High", "Medium", "Low"];
+        const developmentLevels = ["Low", "Medium", "High"];
+        const regionColors = d3.scaleOrdinal(regions, [
+            "#2f6f9f",
+            "#d85d5d",
+            "#2f8b68",
+            "#8557a8"
+        ]);
+        const regionSymbols = d3.scaleOrdinal(regions, [
+            d3.symbolCircle,
+            d3.symbolTriangle,
+            d3.symbolSquare,
+            d3.symbolDiamond
+        ]);
+        const symbolArea = d3.scaleOrdinal(developmentLevels, [150, 280, 430]);
+        const labelOffsets = new Map([
+            ["Aurora", { x: -14, y: 18, anchor: "end" }],
+            ["Kingston", { x: 14, y: -10, anchor: "start" }]
+        ]);
 
-        const x = d3.scaleBand()
-            .domain(regions)
-            .range([margin.left, width - margin.right])
-            .paddingInner(0.08);
-
-        const y = d3.scaleBand()
-            .domain(developmentLevels)
-            .range([margin.top, height - margin.bottom])
-            .paddingInner(0.08);
-
-        const radius = d3.scaleSqrt()
+        const x = d3.scaleLinear()
             .domain([0, d3.max(data, d => d.population)])
-            .range([0, 31]);
+            .nice()
+            .range([margin.left, width - margin.right]);
 
-        const temperature = d3.scaleSequential()
+        const y = d3.scaleLinear()
             .domain(d3.extent(data, d => d.temp_c))
-            .interpolator(d3.interpolateRgbBasis([
-                "#fce4ec",
-                "#f59ab5",
-                "#e45683",
-                "#9b1b51"
-            ]));
-
-        const groupedCells = d3.group(
-            data,
-            d => `${d.region}|${d.development_level}`
-        );
-
-        groupedCells.forEach(cities => {
-            cities.sort((a, b) => d3.ascending(a.city, b.city));
-            cities.forEach((city, index) => {
-                city.cellIndex = index;
-                city.cellCount = cities.length;
-            });
-        });
+            .nice()
+            .range([height - margin.bottom, margin.top]);
 
         const svg = container
             .append("svg")
             .attr("viewBox", `0 0 ${width} ${height}`)
             .attr("role", "img")
-            .attr("aria-labelledby", "city-matrix-title city-matrix-description");
+            .attr("aria-labelledby", "city-scatter-title city-scatter-description");
 
         svg.append("title")
-            .attr("id", "city-matrix-title")
-            .text("City multivariate regional bubble matrix");
+            .attr("id", "city-scatter-title")
+            .text("Population and temperature across twelve cities");
 
         svg.append("desc")
-            .attr("id", "city-matrix-description")
-            .text("Twelve cities grouped by region and development level. Bubble size represents population and color represents average temperature.");
+            .attr("id", "city-scatter-description")
+            .text("A scatterplot with population on the horizontal axis and temperature on the vertical axis. Symbol size represents development level, while color and shape represent region.");
 
         const tooltip = container
             .append("div")
@@ -90,64 +81,40 @@ async function createCityMatrix() {
             .attr("role", "tooltip")
             .attr("aria-hidden", "true");
 
-        const cellData = d3.cross(regions, developmentLevels);
+        svg.append("g")
+            .attr("class", "grid-lines")
+            .attr("transform", `translate(0,${height - margin.bottom})`)
+            .call(d3.axisBottom(x).ticks(7).tickSize(-(height - margin.top - margin.bottom)).tickFormat(""));
 
         svg.append("g")
-            .attr("class", "matrix-cells")
-            .selectAll("rect")
-            .data(cellData)
-            .join("rect")
-            .attr("x", d => x(d[0]))
-            .attr("y", d => y(d[1]))
-            .attr("width", x.bandwidth())
-            .attr("height", y.bandwidth())
-            .attr("rx", 12)
-            .attr("class", (d, i) => `matrix-cell ${i % 2 ? "alternate" : ""}`);
+            .attr("class", "grid-lines")
+            .attr("transform", `translate(${margin.left},0)`)
+            .call(d3.axisLeft(y).ticks(7).tickSize(-(width - margin.left - margin.right)).tickFormat(""));
+
+        svg.append("g")
+            .attr("class", "plot-axis")
+            .attr("transform", `translate(0,${height - margin.bottom})`)
+            .call(d3.axisBottom(x).ticks(7).tickFormat(d => d.toFixed(1)));
+
+        svg.append("g")
+            .attr("class", "plot-axis")
+            .attr("transform", `translate(${margin.left},0)`)
+            .call(d3.axisLeft(y).ticks(7).tickFormat(d => `${d}°`));
 
         svg.append("text")
-            .attr("class", "matrix-axis-title")
+            .attr("class", "axis-title")
             .attr("x", (margin.left + width - margin.right) / 2)
-            .attr("y", 35)
+            .attr("y", height - 20)
             .attr("text-anchor", "middle")
-            .text("Region");
-
-        svg.append("g")
-            .attr("class", "region-labels")
-            .selectAll("text")
-            .data(regions)
-            .join("text")
-            .attr("x", d => x(d) + x.bandwidth() / 2)
-            .attr("y", margin.top - 24)
-            .attr("text-anchor", "middle")
-            .text(d => d);
+            .text("Population (millions)");
 
         svg.append("text")
-            .attr("class", "matrix-axis-title")
+            .attr("class", "axis-title")
             .attr("transform", "rotate(-90)")
             .attr("x", -(margin.top + height - margin.bottom) / 2)
-            .attr("y", 28)
+            .attr("y", 22)
             .attr("text-anchor", "middle")
-            .text("Development Level");
-
-        svg.append("g")
-            .attr("class", "development-labels")
-            .selectAll("text")
-            .data(developmentLevels)
-            .join("text")
-            .attr("x", margin.left - 20)
-            .attr("y", d => y(d) + y.bandwidth() / 2 + 5)
-            .attr("text-anchor", "end")
-            .text(d => d);
-
-        function cityX(d) {
-            const center = x(d.region) + x.bandwidth() / 2;
-            const spacing = Math.min(66, x.bandwidth() / Math.max(d.cellCount, 1));
-            return center + (d.cellIndex - (d.cellCount - 1) / 2) * spacing;
-        }
-
-        function cityY(d) {
-            return y(d.development_level) + y.bandwidth() / 2;
-        }
+            .text("Average temperature (°C)");
 
         function showTooltip(event, d) {
             const bounds = container.node().getBoundingClientRect();
@@ -186,7 +153,7 @@ async function createCityMatrix() {
             .data(data, d => d.city)
             .join("g")
             .attr("class", "city-mark")
-            .attr("transform", d => `translate(${cityX(d)}, ${cityY(d)})`)
+            .attr("transform", d => `translate(${x(d.population)}, ${y(d.temp_c)})`)
             .attr("tabindex", 0)
             .attr("role", "graphics-symbol")
             .attr("aria-label", d => `${d.city}: population ${d.population} million, temperature ${d.temp_c} degrees Celsius, ${d.development_level} development, ${d.region} region`)
@@ -196,89 +163,69 @@ async function createCityMatrix() {
             .on("focus", showFocusedTooltip)
             .on("blur", hideTooltip);
 
-        marks.append("circle")
-            .attr("r", d => radius(d.population))
-            .attr("fill", d => temperature(d.temp_c))
+        marks.append("path")
+            .attr("class", "city-point")
+            .attr("d", d => d3.symbol()
+                .type(regionSymbols(d.region))
+                .size(symbolArea(d.development_level))())
+            .attr("fill", d => regionColors(d.region))
             .attr("stroke", "#ffffff")
-            .attr("stroke-width", 3);
+            .attr("stroke-width", 2.5);
 
         marks.append("text")
-            .attr("class", "city-initial")
-            .attr("text-anchor", "middle")
-            .attr("dy", "0.35em")
-            .text(d => d.city.slice(0, 1));
+            .attr("class", "city-label")
+            .attr("x", d => labelOffsets.get(d.city)?.x ?? Math.sqrt(symbolArea(d.development_level)) / 2 + 9)
+            .attr("y", d => labelOffsets.get(d.city)?.y ?? -8)
+            .attr("text-anchor", d => labelOffsets.get(d.city)?.anchor ?? "start")
+            .text(d => d.city);
 
-        const legendY = height - 135;
+        const regionLegend = svg.append("g")
+            .attr("class", "region-legend")
+            .attr("transform", `translate(${width - margin.right + 52}, ${margin.top + 12})`);
+
+        regionLegend.append("text")
+            .attr("class", "legend-title")
+            .text("Region");
+
+        const regionItems = regionLegend.selectAll("g")
+            .data(regions)
+            .join("g")
+            .attr("class", "region-legend-item")
+            .attr("transform", (d, i) => `translate(8, ${38 + i * 42})`);
+
+        regionItems.append("path")
+            .attr("d", d => d3.symbol().type(regionSymbols(d)).size(150)())
+            .attr("fill", d => regionColors(d));
+
+        regionItems.append("text")
+            .attr("class", "legend-label")
+            .attr("x", 24)
+            .attr("dy", "0.35em")
+            .text(d => d);
+
         const sizeLegend = svg.append("g")
-            .attr("class", "size-legend")
-            .attr("transform", `translate(${margin.left}, ${legendY})`);
+            .attr("class", "development-legend")
+            .attr("transform", `translate(${width - margin.right + 52}, ${margin.top + 250})`);
 
         sizeLegend.append("text")
             .attr("class", "legend-title")
-            .attr("y", -24)
-            .text("Population (millions)");
+            .text("Development level");
 
-        const sizeValues = [0.5, 1.8, 3.2];
-        let sizeOffset = 0;
+        const sizeItems = sizeLegend.selectAll("g")
+            .data(developmentLevels)
+            .join("g")
+            .attr("class", "development-legend-item")
+            .attr("transform", (d, i) => `translate(8, ${42 + i * 58})`);
 
-        sizeValues.forEach(value => {
-            const r = radius(value);
-            const item = sizeLegend.append("g")
-                .attr("transform", `translate(${sizeOffset + r}, 4)`);
+        sizeItems.append("circle")
+            .attr("r", d => Math.sqrt(symbolArea(d) / Math.PI))
+            .attr("class", "size-legend-circle");
 
-            item.append("circle")
-                .attr("r", r)
-                .attr("class", "size-legend-circle");
-
-            item.append("text")
-                .attr("class", "legend-label")
-                .attr("x", 0)
-                .attr("y", r + 20)
-                .attr("text-anchor", "middle")
-                .text(value.toFixed(1));
-
-            sizeOffset += r * 2 + 42;
-        });
-
-        const colorLegendX = 570;
-        const colorLegendWidth = 280;
-        const gradientId = "temperature-gradient";
-        const gradient = svg.append("defs")
-            .append("linearGradient")
-            .attr("id", gradientId)
-            .attr("x1", "0%")
-            .attr("x2", "100%");
-
-        d3.range(0, 1.01, 0.1).forEach(stop => {
-            const domain = temperature.domain();
-            gradient.append("stop")
-                .attr("offset", `${stop * 100}%`)
-                .attr("stop-color", temperature(domain[0] + stop * (domain[1] - domain[0])));
-        });
-
-        const colorLegend = svg.append("g")
-            .attr("class", "color-legend")
-            .attr("transform", `translate(${colorLegendX}, ${legendY})`);
-
-        colorLegend.append("text")
-            .attr("class", "legend-title")
-            .attr("y", -24)
-            .text("Average temperature (°C)");
-
-        colorLegend.append("rect")
-            .attr("width", colorLegendWidth)
-            .attr("height", 18)
-            .attr("rx", 9)
-            .attr("fill", `url(#${gradientId})`);
-
-        const colorLegendScale = d3.scaleLinear()
-            .domain(temperature.domain())
-            .range([0, colorLegendWidth]);
-
-        colorLegend.append("g")
-            .attr("class", "legend-axis")
-            .attr("transform", "translate(0, 20)")
-            .call(d3.axisBottom(colorLegendScale).ticks(5).tickFormat(d => `${d}°`));
+        sizeItems.append("text")
+            .attr("class", "legend-label")
+            .attr("x", 30)
+            .attr("dy", "0.35em")
+            .text(d => d);
     } catch (error) {
         console.error("Unable to create the Lab 2 city visualization:", error);
         container
@@ -288,4 +235,4 @@ async function createCityMatrix() {
     }
 }
 
-createCityMatrix();
+createCityScatterplot();

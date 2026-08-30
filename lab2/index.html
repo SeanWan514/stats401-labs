@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab 2: Multivariate Visualization with D3</title>
-    <link rel="stylesheet" href="../css/style.css?v=3">
+    <link rel="stylesheet" href="../css/style.css?v=4">
 </head>
 <body>
     <main class="page-container lab2-page">
@@ -27,30 +27,46 @@
             <p class="course-label">STATS 401 &middot; Lab 2</p>
             <h1>Multivariate Visualization with D3</h1>
             <p class="chart-description">
-                This regional bubble matrix compares population, average temperature,
+                This multivariate scatterplot compares population, average temperature,
                 development level, and region for twelve cities.
             </p>
 
             <div class="encoding-summary" aria-label="Visual encoding summary">
-                <span><strong>Column</strong> Region</span>
-                <span><strong>Row</strong> Development level</span>
-                <span><strong>Size</strong> Population</span>
-                <span><strong>Color</strong> Temperature</span>
+                <span><strong>X-position</strong> Population</span>
+                <span><strong>Y-position</strong> Temperature</span>
+                <span><strong>Size</strong> Development level</span>
+                <span><strong>Color + shape</strong> Region</span>
             </div>
 
-            <div id="city-matrix" class="visualization-shell" aria-live="polite"></div>
+            <div id="city-scatterplot" class="visualization-shell" aria-live="polite"></div>
+            <p class="figure-caption">
+                Hover over or focus a city symbol to view its exact values.
+            </p>
         </section>
 
         <section class="content-card justification-card" aria-labelledby="design-justification-title">
             <p class="section-label">Design Notes</p>
             <h2 id="design-justification-title">Design Justification</h2>
             <p>
-                This visualization maps region, a nominal variable, to separate columns so viewers can compare geographic groups without implying that one region ranks above another. Development level is placed on ordered rows from High to Low, preserving its ordinal structure. Population, a ratio variable measured in millions, controls bubble area: larger cities therefore receive visibly larger marks, while the size legend supports approximate comparisons. Average temperature in degrees Celsius is an interval variable and is encoded with a continuous light-pink-to-deep-coral color scale, allowing warmer and cooler cities to be distinguished at a glance. Each bubble represents one city, and its tooltip reports the city name plus exact values for all four variables. I hope viewers can quickly notice regional and development patterns, compare city populations, and see how temperature varies across the matrix without the visual complexity of a conventional four-variable scatterplot.
+                Population is mapped to horizontal position because it is ratio data, so a
+                zero-based quantitative axis supports meaningful comparisons of city size.
+                Average temperature is mapped to vertical position; position along a shared
+                scale makes differences in this interval variable easy to compare. Development
+                level is ordinal, so symbol area increases consistently from Low to Medium to
+                High without suggesting an unsupported numeric distance between categories.
+                Region is nominal and is represented redundantly by both color and shape:
+                North uses blue circles, South coral triangles, East green squares, and West
+                purple diamonds. This combination separates regions without implying rank and
+                keeps them distinguishable when color alone is difficult to perceive. Direct
+                city labels support quick identification, while interactive tooltips provide
+                every exact value. Together, these encodings let viewers examine the relationship
+                between population and temperature, compare development levels, and look for
+                regional clusters or exceptions across all twelve cities.
             </p>
         </section>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-    <script src="lab2.js?v=1"></script>
+    <script src="lab2.js?v=2"></script>
 </body>
 </html>

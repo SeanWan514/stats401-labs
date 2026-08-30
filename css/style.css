@@ -146,28 +146,30 @@ p {
     height: auto;
 }
 
-.matrix-cell {
-    fill: #fff7fa;
-    stroke: var(--border);
-    stroke-width: 1;
-}
-
-.matrix-cell.alternate {
-    fill: #fdf0f5;
-}
-
-.matrix-axis-title,
+.axis-title,
 .legend-title {
     fill: var(--accent-dark);
     font-size: 15px;
     font-weight: 700;
 }
 
-.region-labels text,
-.development-labels text {
-    fill: var(--text);
-    font-size: 15px;
-    font-weight: 700;
+.grid-lines path {
+    display: none;
+}
+
+.grid-lines line {
+    stroke: #f0dce4;
+    stroke-width: 1;
+}
+
+.plot-axis path,
+.plot-axis line {
+    stroke: #8b6b78;
+}
+
+.plot-axis text {
+    fill: var(--muted);
+    font-size: 12px;
 }
 
 .city-mark {
@@ -175,22 +177,26 @@ p {
     outline: none;
 }
 
-.city-mark circle {
+.city-point {
     filter: drop-shadow(0 4px 5px rgba(97, 22, 55, 0.2));
-    transition: transform 150ms ease, stroke 150ms ease;
+    transition: transform 150ms ease, stroke 150ms ease, opacity 150ms ease;
 }
 
-.city-mark:hover circle,
-.city-mark:focus circle {
+.city-mark:hover .city-point,
+.city-mark:focus .city-point {
     stroke: var(--accent-dark);
-    stroke-width: 4;
+    stroke-width: 3;
     transform: scale(1.12);
 }
 
-.city-initial {
+.city-label {
     fill: var(--text);
     font-size: 11px;
-    font-weight: 800;
+    font-weight: 700;
+    paint-order: stroke;
+    stroke: #ffffff;
+    stroke-width: 3px;
+    stroke-linejoin: round;
     pointer-events: none;
 }
 
@@ -221,20 +227,21 @@ p {
 }
 
 .size-legend-circle {
-    fill: #f5b1c5;
+    fill: #f4a9c1;
     stroke: var(--accent-dark);
     stroke-width: 1.5;
 }
 
-.legend-label,
-.legend-axis text {
+.legend-label {
     fill: var(--muted);
-    font-size: 12px;
+    font-size: 13px;
 }
 
-.legend-axis path,
-.legend-axis line {
-    stroke: var(--muted);
+.figure-caption {
+    margin: 12px 0 0;
+    color: var(--muted);
+    font-size: 0.9rem;
+    text-align: center;
 }
 
 .justification-card {
