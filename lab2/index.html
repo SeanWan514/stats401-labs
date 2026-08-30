@@ -3,16 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab 2</title>
-    <link rel="stylesheet" href="../css/style.css?v=2">
+    <title>Lab 2: Multivariate Visualization with D3</title>
+    <link rel="stylesheet" href="../css/style.css?v=3">
 </head>
 <body>
-    <main class="page-container">
-        <section class="content-card placeholder-card">
-            <h1>Lab 2</h1>
-            <p>Oops! Seems like Lab 2 has not yet been added. Please check back later.</p>
-            <a class="back-link" href="../index.html">Back to home</a>
+    <main class="page-container lab2-page">
+        <a class="back-link" href="../index.html">&larr; Back to home</a>
+
+        <nav class="lab-nav compact-nav" aria-label="Lab navigation">
+            <a href="../lab1/index.html">Lab 1</a>
+            <a class="active" href="../lab2/index.html" aria-current="page">Lab 2</a>
+            <a href="../lab3/index.html">Lab 3</a>
+            <a href="../lab4/index.html">Lab 4</a>
+            <a href="../lab5/index.html">Lab 5</a>
+            <a href="../lab6/index.html">Lab 6</a>
+            <a href="../lab7/index.html">Lab 7</a>
+            <a href="../lab8/index.html">Lab 8</a>
+            <a href="../lab9/index.html">Lab 9</a>
+            <a href="../lab10/index.html">Lab 10</a>
+        </nav>
+
+        <section class="content-card lab-card">
+            <p class="course-label">STATS 401 &middot; Lab 2</p>
+            <h1>Multivariate Visualization with D3</h1>
+            <p class="chart-description">
+                This regional bubble matrix compares population, average temperature,
+                development level, and region for twelve cities.
+            </p>
+
+            <div class="encoding-summary" aria-label="Visual encoding summary">
+                <span><strong>Column</strong> Region</span>
+                <span><strong>Row</strong> Development level</span>
+                <span><strong>Size</strong> Population</span>
+                <span><strong>Color</strong> Temperature</span>
+            </div>
+
+            <div id="city-matrix" class="visualization-shell" aria-live="polite"></div>
+        </section>
+
+        <section class="content-card justification-card" aria-labelledby="design-justification-title">
+            <p class="section-label">Design Notes</p>
+            <h2 id="design-justification-title">Design Justification</h2>
+            <p>
+                This visualization maps region, a nominal variable, to separate columns so viewers can compare geographic groups without implying that one region ranks above another. Development level is placed on ordered rows from High to Low, preserving its ordinal structure. Population, a ratio variable measured in millions, controls bubble area: larger cities therefore receive visibly larger marks, while the size legend supports approximate comparisons. Average temperature in degrees Celsius is an interval variable and is encoded with a continuous light-pink-to-deep-coral color scale, allowing warmer and cooler cities to be distinguished at a glance. Each bubble represents one city, and its tooltip reports the city name plus exact values for all four variables. I hope viewers can quickly notice regional and development patterns, compare city populations, and see how temperature varies across the matrix without the visual complexity of a conventional four-variable scatterplot.
+            </p>
         </section>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="lab2.js?v=1"></script>
 </body>
 </html>
