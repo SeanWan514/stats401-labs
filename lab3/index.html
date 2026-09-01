@@ -3,16 +3,83 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab 3</title>
-    <link rel="stylesheet" href="../css/style.css?v=2">
+    <title>Lab 3: Web Data Acquisition with Python</title>
+    <link rel="stylesheet" href="../css/style.css?v=5">
 </head>
 <body>
-    <main class="page-container">
-        <section class="content-card placeholder-card">
-            <h1>Lab 3</h1>
-            <p>Oops! Seems like Lab 3 has not yet been added. Please check back later.</p>
-            <a class="back-link" href="../index.html">Back to home</a>
+    <main class="page-container lab3-page">
+        <a class="back-link" href="../index.html">&larr; Back to home</a>
+
+        <nav class="lab-nav compact-nav" aria-label="Lab navigation">
+            <a href="../lab1/index.html">Lab 1</a>
+            <a href="../lab2/index.html">Lab 2</a>
+            <a class="active" href="../lab3/index.html" aria-current="page">Lab 3</a>
+            <a href="../lab4/index.html">Lab 4</a>
+            <a href="../lab5/index.html">Lab 5</a>
+            <a href="../lab6/index.html">Lab 6</a>
+            <a href="../lab7/index.html">Lab 7</a>
+            <a href="../lab8/index.html">Lab 8</a>
+            <a href="../lab9/index.html">Lab 9</a>
+            <a href="../lab10/index.html">Lab 10</a>
+        </nav>
+
+        <section class="content-card lab-card">
+            <p class="course-label">STATS 401 &middot; Lab 3</p>
+            <h1>Web Data Acquisition with Python</h1>
+            <p class="chart-description">
+                This project demonstrates a responsible, reproducible workflow for acquiring
+                structured records from the web and presenting them in an interactive table.
+            </p>
+
+            <div class="dataset-summary" aria-label="Dataset summary">
+                <span><strong>Dataset</strong> Public book catalogue records</span>
+                <span>
+                    <strong>Source</strong>
+                    <a href="https://books.toscrape.com/" target="_blank" rel="noopener noreferrer">Books to Scrape</a>
+                </span>
+                <span><strong>Method</strong> HTML scraping with Python, requests, and BeautifulSoup</span>
+                <span><strong>Records collected</strong> 1,000 books</span>
+            </div>
+
+            <section class="acquisition-notes" aria-labelledby="dataset-description-title">
+                <h2 id="dataset-description-title">Dataset Description</h2>
+                <p>
+                    The dataset contains every book listed in the site's 50-page practice
+                    catalogue. Each record includes its title, price in British pounds,
+                    one-to-five-star rating, availability, catalogue page, and source URL.
+                    A Python script followed pagination automatically, paused for one second
+                    between requests, handled request and parsing failures, validated the final
+                    records, and saved them as CSV. The source is designed for scraping practice;
+                    the script collected only public catalogue data and did not bypass access
+                    controls or collect personal information.
+                </p>
+            </section>
+
+            <section class="table-section" aria-labelledby="book-records-title">
+                <div class="table-heading-row">
+                    <div>
+                        <p class="section-label">Acquired Data</p>
+                        <h2 id="book-records-title">Book Records</h2>
+                    </div>
+                    <label class="search-control" for="book-search">
+                        <span>Filter by title or availability</span>
+                        <input id="book-search" type="search" placeholder="Search 1,000 books" disabled>
+                    </label>
+                </div>
+
+                <p class="sorting-help" id="sorting-help">
+                    Click any column heading to sort ascending; click it again to sort descending.
+                </p>
+                <p id="table-status" class="table-status" role="status" aria-live="polite">
+                    Loading book records&hellip;
+                </p>
+
+                <div id="book-table-container" class="table-container" aria-describedby="sorting-help"></div>
+            </section>
         </section>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="lab3.js?v=1"></script>
 </body>
 </html>
