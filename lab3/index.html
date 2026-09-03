@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab 3: Web Data Acquisition with Python</title>
-    <link rel="stylesheet" href="../css/style.css?v=5">
+    <link rel="stylesheet" href="../css/style.css?v=6">
 </head>
 <body>
     <main class="page-container lab3-page">
@@ -28,30 +28,34 @@
             <h1>Web Data Acquisition with Python</h1>
             <p class="chart-description">
                 This project demonstrates a responsible, reproducible workflow for acquiring
-                structured records from the web and presenting them in an interactive table.
+                structured records from a public API and presenting them in an interactive table.
             </p>
 
             <div class="dataset-summary" aria-label="Dataset summary">
-                <span><strong>Dataset</strong> Public book catalogue records</span>
+                <span><strong>Dataset</strong> Project Gutenberg ebook metadata</span>
                 <span>
                     <strong>Source</strong>
-                    <a href="https://books.toscrape.com/" target="_blank" rel="noopener noreferrer">Books to Scrape</a>
+                    <a href="https://gutendex.com/" target="_blank" rel="noopener noreferrer">Gutendex API</a>
                 </span>
-                <span><strong>Method</strong> HTML scraping with Python, requests, and BeautifulSoup</span>
-                <span><strong>Records collected</strong> 1,000 books</span>
+                <span><strong>Method</strong> REST API acquisition with Python and requests</span>
+                <span><strong>Records collected</strong> 1,200 unique books</span>
             </div>
 
             <section class="acquisition-notes" aria-labelledby="dataset-description-title">
                 <h2 id="dataset-description-title">Dataset Description</h2>
                 <p>
-                    The dataset contains every book listed in the site's 50-page practice
-                    catalogue. Each record includes its title, price in British pounds,
-                    one-to-five-star rating, availability, catalogue page, and source URL.
-                    A Python script followed pagination automatically, paused for one second
-                    between requests, handled request and parsing failures, validated the final
-                    records, and saved them as CSV. The source is designed for scraping practice;
-                    the script collected only public catalogue data and did not bypass access
-                    controls or collect personal information.
+                    This dataset contains 1,200 distinct ebook records from Gutendex, an open
+                    JSON API for Project Gutenberg metadata. The Python script followed the
+                    API's pagination links and selected the first 1,200 books in download-count
+                    order. Every row includes a sequential course ID (0001–1200), the original
+                    Gutenberg ID, title, author, language, download count, source URL, and a
+                    derived popularity tier. The one-to-five-star popularity tier divides this
+                    1,200-book sample into download-count quintiles; it is not a reader review
+                    score. The script used a one-second pause between API pages, bounded retries,
+                    request timeouts, HTTP status checking, response validation, duplicate
+                    detection, and final dataset validation before saving the CSV. This one-time
+                    educational acquisition used public bibliographic metadata, made only the
+                    paginated requests needed for the assignment, and collected no personal data.
                 </p>
             </section>
 
@@ -61,10 +65,16 @@
                         <p class="section-label">Acquired Data</p>
                         <h2 id="book-records-title">Book Records</h2>
                     </div>
-                    <label class="search-control" for="book-search">
-                        <span>Filter by title or availability</span>
-                        <input id="book-search" type="search" placeholder="Search 1,000 books" disabled>
-                    </label>
+                    <form id="book-search-form" class="search-control" role="search">
+                        <label for="book-search">Filter by ID, title, author, or language</label>
+                        <div class="search-input-group">
+                            <input id="book-search" type="search" placeholder="Search 1,200 books" disabled>
+                            <button type="submit" disabled>
+                                <span aria-hidden="true">🔍</span>
+                                <span>Search</span>
+                            </button>
+                        </div>
+                    </form>
                 </div>
 
                 <p class="sorting-help" id="sorting-help">
@@ -80,6 +90,6 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-    <script src="lab3.js?v=1"></script>
+    <script src="lab3.js?v=2"></script>
 </body>
 </html>
