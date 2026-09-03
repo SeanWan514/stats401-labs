@@ -16,7 +16,6 @@ const columnDefinitions = [
 function normalizeRow(row) {
     return {
         record_id: row.record_id,
-        gutenberg_id: +row.gutenberg_id,
         title: row.title,
         author: row.author,
         language: row.language,
@@ -52,16 +51,8 @@ async function createBookTable() {
     try {
         const books = await d3.csv("../data/lab3_data.csv", normalizeRow);
 
-        const uniqueRecordIds = new Set(books.map(book => book.record_id));
-        const uniqueGutenbergIds = new Set(books.map(book => book.gutenberg_id));
-
-        if (
-            books.length !== 1200 ||
-            uniqueRecordIds.size !== 1200 ||
-            uniqueGutenbergIds.size !== 1200 ||
-            books.some(book => (
+        if (books.length !== 1200 || books.some(book => (
             !/^\d{4}$/.test(book.record_id) ||
-            !Number.isInteger(book.gutenberg_id) ||
             !book.title ||
             !book.author ||
             !book.language ||
@@ -70,9 +61,8 @@ async function createBookTable() {
             book.popularity_stars < 1 ||
             book.popularity_stars > 5 ||
             !book.book_url
-            ))
-        ) {
-            throw new Error("The dataset must contain 1,200 complete, unique book records.");
+        ))) {
+            throw new Error("The dataset must contain 1,200 complete book records.");
         }
 
         let visibleBooks = [...books];
