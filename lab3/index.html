@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab 3: Web Data Acquisition with Python</title>
-    <link rel="stylesheet" href="../css/style.css?v=5">
+    <link rel="stylesheet" href="../css/style.css?v=7">
 </head>
 <body>
     <main class="page-container lab3-page">
@@ -44,14 +44,14 @@
             <section class="acquisition-notes" aria-labelledby="dataset-description-title">
                 <h2 id="dataset-description-title">Dataset Description</h2>
                 <p>
-                    The dataset contains every book listed in the site's 50-page practice
-                    catalogue. Each record includes its title, price in British pounds,
-                    one-to-five-star rating, availability, catalogue page, and source URL.
-                    A Python script followed pagination automatically, paused for one second
-                    between requests, handled request and parsing failures, validated the final
-                    records, and saved them as CSV. The source is designed for scraping practice;
-                    the script collected only public catalogue data and did not bypass access
-                    controls or collect personal information.
+                    The dataset contains all 1,000 books from the 50-page Books to Scrape practice
+                    catalogue. Each row has a unique course ID (0001–1000), title, price in British
+                    pounds, one-to-five-star catalogue rating, stock status, source page, and direct
+                    book URL. The Python script loops through all pages automatically, waits one
+                    second between requests, checks HTTP responses, catches request and parsing
+                    errors, validates required fields and unique URLs, and saves the result as CSV.
+                    Books to Scrape is explicitly provided as a safe scraping sandbox; no login,
+                    access control, private information, or human-facing production service is used.
                 </p>
             </section>
 
@@ -61,10 +61,13 @@
                         <p class="section-label">Acquired Data</p>
                         <h2 id="book-records-title">Book Records</h2>
                     </div>
-                    <label class="search-control" for="book-search">
-                        <span>Filter by title or availability</span>
-                        <input id="book-search" type="search" placeholder="Search 1,000 books" disabled>
-                    </label>
+                    <form id="book-search-form" class="search-control" role="search">
+                        <label for="book-search">Filter by ID, title, or availability</label>
+                        <div class="search-input-group">
+                            <input id="book-search" type="search" placeholder="Search 1,000 books" disabled>
+                            <button type="submit" disabled><span aria-hidden="true">🔍</span> Search</button>
+                        </div>
+                    </form>
                 </div>
 
                 <p class="sorting-help" id="sorting-help">
@@ -80,6 +83,6 @@
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-    <script src="lab3.js?v=1"></script>
+    <script src="lab3.js?v=3"></script>
 </body>
 </html>

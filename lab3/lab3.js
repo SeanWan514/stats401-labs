@@ -1,18 +1,21 @@
 const tableContainer = d3.select("#book-table-container");
 const statusMessage = d3.select("#table-status");
+const searchForm = d3.select("#book-search-form");
 const searchInput = d3.select("#book-search");
 
 const columnDefinitions = [
-    { key: "title", label: "Title", type: "text" },
-    { key: "price_gbp", label: "Price (£)", type: "number" },
-    { key: "rating", label: "Rating", type: "number" },
-    { key: "availability", label: "Availability", type: "text" },
-    { key: "page", label: "Source Page", type: "number" },
-    { key: "book_url", label: "Source", type: "text" }
+    { key: "record_id", label: "ID (0001–1000)", type: "text", sortable: true },
+    { key: "title", label: "Title (A–Z / Z–A)", type: "text", sortable: true },
+    { key: "price_gbp", label: "Price (£, low / high)", type: "number", sortable: true },
+    { key: "rating", label: "Rating (1–5 stars)", type: "number", sortable: true },
+    { key: "availability", label: "Availability (A–Z / Z–A)", type: "text", sortable: true },
+    { key: "page", label: "Catalogue Page (low / high)", type: "number", sortable: true },
+    { key: "book_url", label: "Source", type: "text", sortable: false }
 ];
 
 function normalizeRow(row) {
     return {
+        record_id: row.record_id,
         title: row.title,
         price_gbp: +row.price_gbp,
         rating: +row.rating,
@@ -25,9 +28,6 @@ function normalizeRow(row) {
 function displayValue(row, column) {
     if (column.key === "price_gbp") {
         return `£${row.price_gbp.toFixed(2)}`;
-    }
-    if (column.key === "rating") {
-        return `${row.rating} / 5`;
     }
     if (column.key === "book_url") {
         return "View book";
@@ -55,6 +55,7 @@ async function createBookTable() {
         const books = await d3.csv("../data/lab3_data.csv", normalizeRow);
 
         if (books.length < 1000 || books.some(book => (
+            !/^\d{4}$/.test(book.record_id) ||
             !book.title ||
             !Number.isFinite(book.price_gbp) ||
             !Number.isFinite(book.rating) ||
@@ -83,9 +84,9 @@ async function createBookTable() {
             .data(columnDefinitions)
             .join("th")
             .attr("scope", "col")
-            .attr("aria-sort", "none");
+            .attr("aria-sort", column => column.sortable ? "none" : null);
 
-        const headerButtons = headerCells
+        const headerButtons = headerCells.filter(column => column.sortable)
             .append("button")
             .attr("type", "button")
             .attr("class", "sort-button")
@@ -99,16 +100,16 @@ async function createBookTable() {
                 activeSort = { key: column.key, direction };
                 visibleBooks.sort(comparisonFor(column, direction));
 
-                headerCells.attr("aria-sort", heading => (
+                headerCells.attr("aria-sort", heading => heading.sortable ? (
                     heading.key === column.key ? direction : "none"
-                ));
+                ) : null);
 
                 headerButtons
                     .classed("active", heading => heading.key === column.key)
                     .select(".sort-indicator")
                     .text(heading => {
-                        if (heading.key !== column.key) return "↕";
-                        return direction === "ascending" ? "↑" : "↓";
+                        if (heading.key !== column.key) return "⇅";
+                        return direction === "ascending" ? "▲" : "▼";
                     });
 
                 renderRows();
@@ -120,7 +121,12 @@ async function createBookTable() {
         headerButtons.append("span")
             .attr("class", "sort-indicator")
             .attr("aria-hidden", "true")
-            .text("↕");
+            .text("⇅");
+
+        headerCells.filter(column => !column.sortable)
+            .append("span")
+            .attr("class", "static-column-heading")
+            .text(column => column.label);
 
         const tableBody = table.append("tbody");
 
@@ -143,6 +149,12 @@ async function createBookTable() {
                             .attr("target", "_blank")
                             .attr("rel", "noopener noreferrer")
                             .text(displayValue(cell.book, cell.column));
+                    } else if (cell.column.key === "rating") {
+                        const stars = cell.book.rating;
+                        tableCell.append("span")
+                            .attr("class", "popularity-stars")
+                            .attr("aria-label", `${stars} out of 5 stars`)
+                            .text(`${"★".repeat(stars)}${"☆".repeat(5 - stars)}`);
                     } else {
                         tableCell.text(displayValue(cell.book, cell.column));
                     }
@@ -153,11 +165,11 @@ async function createBookTable() {
             );
         }
 
-        searchInput
-            .property("disabled", false)
-            .on("input", function() {
-                const query = this.value.trim().toLocaleLowerCase();
+        searchForm.on("submit", function(event) {
+                event.preventDefault();
+                const query = searchInput.property("value").trim().toLocaleLowerCase();
                 visibleBooks = books.filter(book => (
+                    book.record_id.includes(query) ||
                     book.title.toLocaleLowerCase().includes(query) ||
                     book.availability.toLocaleLowerCase().includes(query)
                 ));
@@ -172,6 +184,8 @@ async function createBookTable() {
                 renderRows();
             });
 
+        searchInput.property("disabled", false);
+        searchForm.select("button").property("disabled", false);
         renderRows();
     } catch (error) {
         console.error("Unable to create the Lab 3 data table:", error);

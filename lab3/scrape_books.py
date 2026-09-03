@@ -44,6 +44,7 @@ def parse_page(html: str, page_number: int) -> list[dict]:
 
         records.append(
             {
+                "record_id": f"{len(records) + 1:04d}",
                 "title": title_link["title"],
                 "price_gbp": float(price_text.replace("£", "")),
                 "rating": RATING_VALUES[rating_word],
@@ -93,6 +94,7 @@ def validate_and_save(records: list[dict]) -> None:
     """Validate the assignment requirements and save a reproducible CSV."""
     dataframe = pd.DataFrame(records)
     expected_columns = [
+        "record_id",
         "title",
         "price_gbp",
         "rating",
@@ -107,6 +109,8 @@ def validate_and_save(records: list[dict]) -> None:
         raise ValueError(f"Expected at least 1,000 records, but collected {len(dataframe)}.")
     if dataframe[expected_columns].isna().any().any():
         raise ValueError("The acquired dataset contains missing required values.")
+    if not dataframe["record_id"].is_unique:
+        raise ValueError("The acquired dataset contains duplicate course IDs.")
     if not dataframe["book_url"].is_unique:
         raise ValueError("The acquired dataset contains duplicate book URLs.")
 

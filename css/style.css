@@ -319,6 +319,12 @@ p {
     font: inherit;
 }
 
+.search-input-group { display: flex; }
+.search-input-group input { min-width: 0; flex: 1; border-radius: 7px 0 0 7px; }
+.search-control button { padding: 10px 13px; color: #fff; background: var(--accent-dark); border: 1px solid var(--accent-dark); border-radius: 0 7px 7px 0; cursor: pointer; font: inherit; font-weight: 700; }
+.search-control button:hover, .search-control button:focus-visible { background: var(--accent); }
+.search-control button:disabled { opacity: .6; cursor: wait; }
+
 .search-control input:focus {
     border-color: var(--accent);
     outline: 3px solid rgba(195, 47, 108, 0.14);
@@ -398,8 +404,13 @@ p {
 }
 
 .sort-indicator {
-    font-size: 1rem;
+    min-width: 18px;
+    font-size: 1.25rem;
+    font-weight: 900;
 }
+
+.static-column-heading { display: block; padding: 13px 14px; }
+.popularity-stars { color: #b11f5d; font-size: 1rem; letter-spacing: .04em; white-space: nowrap; }
 
 .data-table td {
     padding: 11px 14px;
