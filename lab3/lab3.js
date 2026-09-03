@@ -1,35 +1,38 @@
 const tableContainer = d3.select("#book-table-container");
 const statusMessage = d3.select("#table-status");
-const searchForm = d3.select("#book-search-form");
 const searchInput = d3.select("#book-search");
 
 const columnDefinitions = [
-    { key: "record_id", label: "ID", sortHint: "0001–1200", type: "text", sortable: true },
-    { key: "title", label: "Title", sortHint: "A–Z / Z–A", type: "text", sortable: true },
-    { key: "author", label: "Author", sortHint: "A–Z / Z–A", type: "text", sortable: true },
-    { key: "language", label: "Language", sortHint: "A–Z / Z–A", type: "text", sortable: true },
-    { key: "download_count", label: "Downloads", sortHint: "Low / High", type: "number", sortable: true },
-    { key: "popularity_stars", label: "Popularity", sortHint: "1–5 stars", type: "number", sortable: true },
-    { key: "book_url", label: "Source", sortHint: "Book page", type: "text", sortable: false }
+    { key: "title", label: "Title", type: "text" },
+    { key: "price_gbp", label: "Price (£)", type: "number" },
+    { key: "rating", label: "Rating", type: "number" },
+    { key: "availability", label: "Availability", type: "text" },
+    { key: "page", label: "Source Page", type: "number" },
+    { key: "book_url", label: "Source", type: "text" }
 ];
 
 function normalizeRow(row) {
     return {
-        record_id: row.record_id,
         title: row.title,
-        author: row.author,
-        language: row.language,
-        download_count: +row.download_count,
-        popularity_stars: +row.popularity_stars,
+        price_gbp: +row.price_gbp,
+        rating: +row.rating,
+        availability: row.availability,
+        page: +row.page,
         book_url: row.book_url
     };
 }
 
-function directionLabel(column, direction) {
-    if (column.type === "text") {
-        return direction === "ascending" ? "A–Z" : "Z–A";
+function displayValue(row, column) {
+    if (column.key === "price_gbp") {
+        return `£${row.price_gbp.toFixed(2)}`;
     }
-    return direction === "ascending" ? "low to high" : "high to low";
+    if (column.key === "rating") {
+        return `${row.rating} / 5`;
+    }
+    if (column.key === "book_url") {
+        return "View book";
+    }
+    return row[column.key];
 }
 
 function comparisonFor(column, direction) {
@@ -51,18 +54,15 @@ async function createBookTable() {
     try {
         const books = await d3.csv("../data/lab3_data.csv", normalizeRow);
 
-        if (books.length !== 1200 || books.some(book => (
-            !/^\d{4}$/.test(book.record_id) ||
+        if (books.length < 1000 || books.some(book => (
             !book.title ||
-            !book.author ||
-            !book.language ||
-            !Number.isFinite(book.download_count) ||
-            !Number.isInteger(book.popularity_stars) ||
-            book.popularity_stars < 1 ||
-            book.popularity_stars > 5 ||
+            !Number.isFinite(book.price_gbp) ||
+            !Number.isFinite(book.rating) ||
+            !book.availability ||
+            !Number.isFinite(book.page) ||
             !book.book_url
         ))) {
-            throw new Error("The dataset must contain 1,200 complete book records.");
+            throw new Error("The dataset must contain at least 1,000 complete book records.");
         }
 
         let visibleBooks = [...books];
@@ -74,7 +74,7 @@ async function createBookTable() {
             .attr("class", "data-table");
 
         table.append("caption")
-            .text("Twelve hundred book records acquired from the Gutendex API");
+            .text("One thousand book records acquired from Books to Scrape");
 
         const headerCells = table
             .append("thead")
@@ -83,65 +83,51 @@ async function createBookTable() {
             .data(columnDefinitions)
             .join("th")
             .attr("scope", "col")
-            .attr("aria-sort", column => column.sortable ? "none" : null);
+            .attr("aria-sort", "none");
 
-        headerCells.each(function(column) {
-            const heading = d3.select(this);
+        const headerButtons = headerCells
+            .append("button")
+            .attr("type", "button")
+            .attr("class", "sort-button")
+            .attr("aria-label", column => `Sort by ${column.label}`)
+            .on("click", function(event, column) {
+                const direction = activeSort.key === column.key &&
+                    activeSort.direction === "ascending"
+                    ? "descending"
+                    : "ascending";
 
-            if (!column.sortable) {
-                const label = heading.append("span")
-                    .attr("class", "static-column-heading");
-                label.append("span").text(column.label);
-                label.append("small").text(column.sortHint);
-                return;
-            }
+                activeSort = { key: column.key, direction };
+                visibleBooks.sort(comparisonFor(column, direction));
 
-            const button = heading.append("button")
-                .attr("type", "button")
-                .attr("class", "sort-button")
-                .attr("aria-label", `Sort ${column.label}: ${column.sortHint}`)
-                .on("click", function() {
-                    const direction = activeSort.key === column.key &&
-                        activeSort.direction === "ascending"
-                        ? "descending"
-                        : "ascending";
+                headerCells.attr("aria-sort", heading => (
+                    heading.key === column.key ? direction : "none"
+                ));
 
-                    activeSort = { key: column.key, direction };
-                    visibleBooks.sort(comparisonFor(column, direction));
-
-                    headerCells.attr("aria-sort", headingColumn => {
-                        if (!headingColumn.sortable) return null;
-                        return headingColumn.key === column.key ? direction : "none";
+                headerButtons
+                    .classed("active", heading => heading.key === column.key)
+                    .select(".sort-indicator")
+                    .text(heading => {
+                        if (heading.key !== column.key) return "↕";
+                        return direction === "ascending" ? "↑" : "↓";
                     });
 
-                    table.selectAll(".sort-button")
-                        .classed("active", headingColumn => headingColumn.key === column.key)
-                        .select(".sort-indicator")
-                        .text(headingColumn => {
-                            if (headingColumn.key !== column.key) return "⇅";
-                            return direction === "ascending" ? "▲" : "▼";
-                        });
+                renderRows();
+            });
 
-                    renderRows();
-                });
+        headerButtons.append("span")
+            .text(column => column.label);
 
-            const text = button.append("span")
-                .attr("class", "sort-label");
-            text.append("span").text(column.label);
-            text.append("small").text(column.sortHint);
-
-            button.append("span")
-                .attr("class", "sort-indicator")
-                .attr("aria-hidden", "true")
-                .text("⇅");
-        });
+        headerButtons.append("span")
+            .attr("class", "sort-indicator")
+            .attr("aria-hidden", "true")
+            .text("↕");
 
         const tableBody = table.append("tbody");
 
         function renderRows() {
             const rows = tableBody
                 .selectAll("tr")
-                .data(visibleBooks, book => book.record_id)
+                .data(visibleBooks, book => book.book_url)
                 .join("tr");
 
             rows.selectAll("td")
@@ -156,57 +142,36 @@ async function createBookTable() {
                             .attr("href", cell.book.book_url)
                             .attr("target", "_blank")
                             .attr("rel", "noopener noreferrer")
-                            .text("View book");
-                    } else if (cell.column.key === "download_count") {
-                        tableCell.text(cell.book.download_count.toLocaleString());
-                    } else if (cell.column.key === "popularity_stars") {
-                        const stars = cell.book.popularity_stars;
-                        tableCell.append("span")
-                            .attr("class", "popularity-stars")
-                            .attr("aria-label", `${stars} out of 5 popularity stars`)
-                            .text(`${"★".repeat(stars)}${"☆".repeat(5 - stars)}`);
+                            .text(displayValue(cell.book, cell.column));
                     } else {
-                        tableCell.text(cell.book[cell.column.key]);
+                        tableCell.text(displayValue(cell.book, cell.column));
                     }
                 });
 
-            const sortText = activeSort.key
-                ? (() => {
-                    const column = columnDefinitions.find(
-                        definition => definition.key === activeSort.key
-                    );
-                    return ` Sorted by ${column.label}, ${directionLabel(column, activeSort.direction)}.`;
-                })()
-                : "";
-
             statusMessage.text(
-                `Showing ${visibleBooks.length.toLocaleString()} of ${books.length.toLocaleString()} records.${sortText}`
+                `Showing ${visibleBooks.length.toLocaleString()} of ${books.length.toLocaleString()} records`
             );
         }
 
-        searchForm.on("submit", function(event) {
-            event.preventDefault();
-            const query = searchInput.property("value").trim().toLocaleLowerCase();
+        searchInput
+            .property("disabled", false)
+            .on("input", function() {
+                const query = this.value.trim().toLocaleLowerCase();
+                visibleBooks = books.filter(book => (
+                    book.title.toLocaleLowerCase().includes(query) ||
+                    book.availability.toLocaleLowerCase().includes(query)
+                ));
 
-            visibleBooks = books.filter(book => (
-                book.record_id.includes(query) ||
-                book.title.toLocaleLowerCase().includes(query) ||
-                book.author.toLocaleLowerCase().includes(query) ||
-                book.language.toLocaleLowerCase().includes(query)
-            ));
+                if (activeSort.key) {
+                    const column = columnDefinitions.find(
+                        definition => definition.key === activeSort.key
+                    );
+                    visibleBooks.sort(comparisonFor(column, activeSort.direction));
+                }
 
-            if (activeSort.key) {
-                const column = columnDefinitions.find(
-                    definition => definition.key === activeSort.key
-                );
-                visibleBooks.sort(comparisonFor(column, activeSort.direction));
-            }
+                renderRows();
+            });
 
-            renderRows();
-        });
-
-        searchInput.property("disabled", false);
-        searchForm.select("button").property("disabled", false);
         renderRows();
     } catch (error) {
         console.error("Unable to create the Lab 3 data table:", error);
