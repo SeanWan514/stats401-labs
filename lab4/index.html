@@ -52,11 +52,11 @@
             <section class="justification-card" aria-labelledby="analysis-title">
                 <p class="section-label">Short Analysis</p>
                 <h2 id="analysis-title">Analysis</h2>
-                <p id="lab4-analysis">Analysis will be inserted after the validated model results are generated.</p>
+                <p id="lab4-analysis">This analysis uses a deterministic 1,500-tweet sample from the MIT-licensed Davidson et al. hate-speech and offensive-language corpus. The Python pipeline checked for missing and duplicate records, converted annotation counts to numeric values, verified that annotation votes were internally consistent, normalized whitespace, and created separate text representations for TF-IDF and sentiment analysis. Sentiment was estimated for every retained tweet with the CardiffNLP Twitter RoBERTa model. The sentiment score is the predicted positive probability minus the predicted negative probability. In the 100% stacked bars, position shows the share assigned to each sentiment while color distinguishes negative, neutral, and positive predictions; the second attribute is the original human annotation category. Negative predictions dominate the hate-speech group (88.0%) and the offensive-language group (71.3%). The neither category is more balanced: 39.3% negative, 39.7% neutral, and 21.0% positive. These differences suggest that RoBERTa detects strongly negative language in the two harmful-language categories, although its outputs remain model estimates and should not be treated as ground truth.</p>
             </section>
         </section>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-    <script src="lab4.js?v=1"></script>
+    <script src="lab4.js?v=2"></script>
 </body>
 </html>
