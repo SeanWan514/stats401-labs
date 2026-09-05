@@ -536,6 +536,26 @@ p {
     max-width: 680px;
 }
 
+.method-note {
+    margin: 30px 0;
+    padding: 20px 22px;
+    background: #fff8fa;
+    border-left: 4px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+}
+
+.method-note h2 { font-size: 1.3rem; }
+.method-note p { margin-bottom: 0; color: var(--muted); }
+.method-note code { color: var(--accent-dark); overflow-wrap: anywhere; }
+.lab4-figure { margin-top: 34px; }
+.lab4-chart { position: relative; margin-top: 22px; overflow-x: auto; }
+.lab4-chart svg { display: block; width: 100%; min-width: 700px; height: auto; }
+.sentiment-segment { cursor: pointer; stroke: #fff; stroke-width: 2; transition: opacity 150ms ease, stroke-width 150ms ease; }
+.sentiment-segment:hover,
+.sentiment-segment:focus { opacity: .82; stroke: var(--text); stroke-width: 3; outline: none; }
+.sentiment-legend text { fill: var(--text); font-size: 14px; font-weight: 700; }
+.lab4-tooltip { min-width: 210px; }
+
 @media (max-width: 640px) {
     .page-container {
         padding-top: 32px;

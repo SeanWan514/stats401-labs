@@ -3,16 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab 4</title>
-    <link rel="stylesheet" href="../css/style.css?v=2">
+    <title>Lab 4: Cleaning Web Data for Visualization</title>
+    <link rel="stylesheet" href="../css/style.css?v=8">
 </head>
 <body>
-    <main class="page-container">
-        <section class="content-card placeholder-card">
-            <h1>Lab 4</h1>
-            <p>Oops! Seems like Lab 4 has not yet been added. Please check back later.</p>
-            <a class="back-link" href="../index.html">Back to home</a>
+    <main class="page-container lab4-page">
+        <a class="back-link" href="../index.html">&larr; Back to home</a>
+        <nav class="lab-nav compact-nav" aria-label="Lab navigation">
+            <a href="../lab1/index.html">Lab 1</a>
+            <a href="../lab2/index.html">Lab 2</a>
+            <a href="../lab3/index.html">Lab 3</a>
+            <a class="active" href="../lab4/index.html" aria-current="page">Lab 4</a>
+            <a href="../lab5/index.html">Lab 5</a>
+            <a href="../lab6/index.html">Lab 6</a>
+            <a href="../lab7/index.html">Lab 7</a>
+            <a href="../lab8/index.html">Lab 8</a>
+            <a href="../lab9/index.html">Lab 9</a>
+            <a href="../lab10/index.html">Lab 10</a>
+        </nav>
+
+        <section class="content-card lab-card">
+            <p class="course-label">STATS 401 &middot; Lab 4</p>
+            <h1>Cleaning Web Data for Visualization</h1>
+            <p class="chart-description">A reproducible Python pipeline cleans 1,500 tweets, estimates sentiment with RoBERTa, and prepares tidy data for D3.</p>
+
+            <div class="dataset-summary" aria-label="Dataset summary">
+                <span><strong>Dataset</strong> Davidson et al. hate-speech and offensive-language corpus</span>
+                <span><strong>Source</strong><a href="https://github.com/t-davidson/hate-speech-and-offensive-language" target="_blank" rel="noopener noreferrer">MIT-licensed GitHub repository</a></span>
+                <span><strong>Records analyzed</strong> 1,500 tweets</span>
+                <span><strong>Sentiment model</strong> CardiffNLP Twitter RoBERTa</span>
+            </div>
+
+            <section class="method-note" aria-labelledby="method-title">
+                <h2 id="method-title">Method and Limitation</h2>
+                <p>The source provides raw tweet text and human annotations for hate speech, offensive language, or neither. Those annotations are used only as the comparison attribute. Sentiment is recalculated from every tweet with <code>cardiffnlp/twitter-roberta-base-sentiment-latest</code>. The probabilities and labels are model-generated estimates, not ground truth; sarcasm, slang, reclaimed language, and limited context can produce errors.</p>
+            </section>
+
+            <section class="lab4-figure" aria-labelledby="visualization-title">
+                <p class="section-label">D3 Visualization</p>
+                <h2 id="visualization-title">RoBERTa Sentiment by Annotation Category</h2>
+                <p class="chart-description">Each bar totals 100%. Move your pointer over a segment, or focus it with the keyboard, to inspect its count, share, and average sentiment score.</p>
+                <div id="lab4-chart" class="lab4-chart">
+                    <div id="lab4-tooltip" class="chart-tooltip lab4-tooltip" role="status" aria-live="polite"></div>
+                </div>
+                <p class="figure-caption">Sentiment score equals P(positive) minus P(negative), ranging approximately from −1 to 1.</p>
+            </section>
+
+            <section class="justification-card" aria-labelledby="analysis-title">
+                <p class="section-label">Short Analysis</p>
+                <h2 id="analysis-title">Analysis</h2>
+                <p id="lab4-analysis">Analysis will be inserted after the validated model results are generated.</p>
+            </section>
         </section>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="lab4.js?v=1"></script>
 </body>
 </html>
