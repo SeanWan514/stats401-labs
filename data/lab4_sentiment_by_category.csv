@@ -1,0 +1,10 @@
+annotation_category,sentiment,count,average_score,proportion
+Hate speech,Negative,88,-0.8326781,0.88
+Hate speech,Neutral,8,-0.19324857,0.08
+Hate speech,Positive,4,0.66055524,0.04
+Neither,Negative,118,-0.7525272,0.3933333333333333
+Neither,Neutral,119,-0.027826104,0.39666666666666667
+Neither,Positive,63,0.82858324,0.21
+Offensive language,Negative,784,-0.77426857,0.7127272727272728
+Offensive language,Neutral,218,-0.103183605,0.19818181818181818
+Offensive language,Positive,98,0.5908903,0.0890909090909091
