@@ -3,16 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab 5</title>
-    <link rel="stylesheet" href="../css/style.css?v=2">
+    <title>Lab 5: Interactive Network Visualization with D3</title>
+    <link rel="stylesheet" href="../css/style.css?v=9">
 </head>
 <body>
-    <main class="page-container">
-        <section class="content-card placeholder-card">
-            <h1>Lab 5</h1>
-            <p>Oops! Seems like Lab 5 has not yet been added. Please check back later.</p>
-            <a class="back-link" href="../index.html">Back to home</a>
+    <main class="page-container lab5-page">
+        <a class="back-link" href="../index.html">&larr; Back to home</a>
+        <nav class="lab-nav compact-nav" aria-label="Lab navigation">
+            <a href="../lab1/index.html">Lab 1</a>
+            <a href="../lab2/index.html">Lab 2</a>
+            <a href="../lab3/index.html">Lab 3</a>
+            <a href="../lab4/index.html">Lab 4</a>
+            <a class="active" href="../lab5/index.html" aria-current="page">Lab 5</a>
+            <a href="../lab6/index.html">Lab 6</a>
+            <a href="../lab7/index.html">Lab 7</a>
+            <a href="../lab8/index.html">Lab 8</a>
+            <a href="../lab9/index.html">Lab 9</a>
+            <a href="../lab10/index.html">Lab 10</a>
+        </nav>
+
+        <section class="content-card lab-card">
+            <p class="course-label">STATS 401 &middot; Lab 5</p>
+            <h1>Interactive Network Visualization with D3</h1>
+            <p class="chart-description">Two coordinated views reveal connections, attributes, and structural patterns in a synthetic 50-station urban transit network.</p>
+
+            <div class="dataset-summary" aria-label="Dataset summary">
+                <span><strong>Network</strong> Urban transit system</span>
+                <span><strong>Nodes</strong> 50 stations</span>
+                <span><strong>Links</strong> 50 direct connections</span>
+                <span><strong>Direction</strong> Undirected</span>
+            </div>
+
+            <section class="lab5-section" aria-labelledby="network-title">
+                <p class="section-label">View 1</p>
+                <h2 id="network-title">Force-Directed Node-Link Diagram</h2>
+                <p class="chart-description">Drag a station to rearrange the network. Hover over or focus a station to highlight its direct neighbors; inspect stations and routes through their tooltips.</p>
+                <div id="network-legend" class="network-legend" aria-label="Node-link encoding legend"></div>
+                <div id="network-chart" class="network-chart">
+                    <div id="network-tooltip" class="chart-tooltip network-tooltip" role="status" aria-live="polite"></div>
+                </div>
+            </section>
+
+            <section class="lab5-section" aria-labelledby="matrix-title">
+                <p class="section-label">View 2</p>
+                <h2 id="matrix-title">Adjacency Matrix</h2>
+                <p class="chart-description">Rows and columns represent the same district-grouped station order. A colored cell marks a direct connection; color shows route type and opacity shows travel time.</p>
+                <div id="matrix-legend" class="network-legend" aria-label="Matrix encoding legend"></div>
+                <div id="matrix-chart" class="matrix-chart">
+                    <div id="matrix-tooltip" class="chart-tooltip network-tooltip" role="status" aria-live="polite"></div>
+                </div>
+            </section>
+
+            <section class="justification-card lab5-writing" aria-labelledby="design-title">
+                <p class="section-label">Design Description</p>
+                <h2 id="design-title">Why These Encodings Work</h2>
+                <p>In the node-link view, district controls node color, daily passengers control area, and station type controls shape. Route type controls link color while travel time controls width, making long connections visually prominent. Dragging resolves overlaps, highlighting isolates direct neighborhoods, and tooltips provide exact station and route values. In the matrix, identical row and column positions identify station pairs. Filled cells show links, color preserves route type, and opacity represents travel time. Ordering stations by district forms comparable blocks, while colored label strips retain district membership.</p>
+            </section>
+
+            <section class="justification-card lab5-writing" aria-labelledby="questions-title">
+                <p class="section-label">Network Questions and Findings</p>
+                <h2 id="questions-title">What the Visualizations Reveal</h2>
+                <ol class="network-findings">
+                    <li><strong>Central stations — Partially, node-link.</strong> Neighbor highlighting shows that Stations 4, 7, 10, 13, 16, 18, 21, 23, 25, 29, 31, 33, 34, and 38 have the maximum degree of three; no station is uniquely central.</li>
+                    <li><strong>District connectivity — Well, adjacency matrix.</strong> District ordering and filled cells show East–South has 11 direct links, ahead of Central–North and East–West with nine each.</li>
+                    <li><strong>Transfer and terminal topology — Well, node-link.</strong> Shape and highlighting show these station types distributed along the chain and among shortcut endpoints, rather than confined to one cluster.</li>
+                    <li><strong>High passenger volume — Well, node-link.</strong> Node area identifies Stations 46–50 as the five highest-volume stations, led by Station 50 at 9,850 daily passengers.</li>
+                    <li><strong>Longest direct connections — Well, both.</strong> Thick links and dark matrix cells identify Station 7–31 (16 minutes), Station 18–34 (15), and Station 29–50 (14).</li>
+                    <li><strong>Route-type concentration — Partially, adjacency matrix.</strong> Cell colors show all three types dispersed; Metro and Shuttle each occur four times between East and South, while Express reaches four links in both Central–North and East–West.</li>
+                </ol>
+            </section>
         </section>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="lab5.js?v=1"></script>
 </body>
 </html>
