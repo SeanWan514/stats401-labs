@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab 5: Interactive Network Visualization with D3</title>
-    <link rel="stylesheet" href="../css/style.css?v=9">
+    <link rel="stylesheet" href="../css/style.css?v=10">
 </head>
 <body>
     <main class="page-container lab5-page">
@@ -25,56 +25,62 @@
         <section class="content-card lab-card">
             <p class="course-label">STATS 401 &middot; Lab 5</p>
             <h1>Interactive Network Visualization with D3</h1>
-            <p class="chart-description">Two coordinated views reveal connections, attributes, and structural patterns in a synthetic 50-station urban transit network.</p>
+            <p class="chart-description">For this lab, I first implemented the two visualizations, the Node Link Visualization and the Adjacency Matrix, respectively, followed by relevant descriptions and my answers to the questions. Enjoy!</p>
 
-            <div class="dataset-summary" aria-label="Dataset summary">
-                <span><strong>Network</strong> Urban transit system</span>
-                <span><strong>Nodes</strong> 50 stations</span>
-                <span><strong>Links</strong> 50 direct connections</span>
-                <span><strong>Direction</strong> Undirected</span>
-            </div>
+            <section class="lab5-section lab5-dataset" aria-labelledby="dataset-title">
+                <h2 id="dataset-title">1. Dataset Description</h2>
+                <div class="dataset-summary" aria-label="Dataset summary">
+                    <span><strong>Network</strong> Urban Transit Network, using the dataset provided</span>
+                    <span><strong>Nodes</strong> 50 stations</span>
+                    <span><strong>Edges/Links</strong> 50 connections/edges</span>
+                    <span><strong>Direction</strong> Undirected</span>
+                </div>
+            </section>
 
             <section class="lab5-section" aria-labelledby="network-title">
                 <p class="section-label">View 1</p>
-                <h2 id="network-title">Force-Directed Node-Link Diagram</h2>
-                <p class="chart-description">Drag a station to rearrange the network. Hover over or focus a station to highlight its direct neighbors; inspect stations and routes through their tooltips.</p>
+                <h2 id="network-title">2. Node Link Visualization</h2>
+                <p class="chart-description">Feel free to drag any station to rearrange the network visualization. You can also hover over or focus a station to highlight its direct neighbors. You can also inspect the stations and routes through their tooltips.</p>
                 <div id="network-legend" class="network-legend" aria-label="Node-link encoding legend"></div>
                 <div id="network-chart" class="network-chart">
                     <div id="network-tooltip" class="chart-tooltip network-tooltip" role="status" aria-live="polite"></div>
                 </div>
             </section>
 
+            <section class="justification-card lab5-writing" aria-labelledby="node-design-title">
+                <h2 id="node-design-title">3. Node-Link Design Description</h2>
+                <p>District color identifies location; circle area represents daily passengers. Fill distinguishes roles: solid means Terminal, half-filled means Transfer, and outlined means Local. Solid, dashed, and dotted links identify Express, Metro, and Shuttle; width represents travel time. Dragging reduces overlap, highlighting isolates neighbors, and tooltips give exact values.</p>
+            </section>
+
             <section class="lab5-section" aria-labelledby="matrix-title">
                 <p class="section-label">View 2</p>
-                <h2 id="matrix-title">Adjacency Matrix</h2>
-                <p class="chart-description">Rows and columns represent the same district-grouped station order. A colored cell marks a direct connection; color shows route type and opacity shows travel time.</p>
+                <h2 id="matrix-title">4. Adjacency Matrix</h2>
+                <p class="chart-description">For the Adjacency Matrix, we use the rows and columns to represent the same district-grouped station order. Notice that each colored cell marks a direct connection. Color denotes route type, while density denotes travel time. Enjoy!</p>
                 <div id="matrix-legend" class="network-legend" aria-label="Matrix encoding legend"></div>
                 <div id="matrix-chart" class="matrix-chart">
                     <div id="matrix-tooltip" class="chart-tooltip network-tooltip" role="status" aria-live="polite"></div>
                 </div>
             </section>
 
-            <section class="justification-card lab5-writing" aria-labelledby="design-title">
-                <p class="section-label">Design Description</p>
-                <h2 id="design-title">Why These Encodings Work</h2>
-                <p>In the node-link view, district controls node color, daily passengers control area, and station type controls shape. Route type controls link color while travel time controls width, making long connections visually prominent. Dragging resolves overlaps, highlighting isolates direct neighborhoods, and tooltips provide exact station and route values. In the matrix, identical row and column positions identify station pairs. Filled cells show links, color preserves route type, and opacity represents travel time. Ordering stations by district forms comparable blocks, while colored label strips retain district membership.</p>
+            <section class="justification-card lab5-writing" aria-labelledby="matrix-design-title">
+                <h2 id="matrix-design-title">5. Matrix Design Description</h2>
+                <p>The same district-grouped order appears on both axes; each filled cell records a connection. Red, green, or blue identifies route type, and three density levels classify travel time. Pink strips preserve district membership; the ordering reveals within- and between-district blocks.</p>
             </section>
 
             <section class="justification-card lab5-writing" aria-labelledby="questions-title">
-                <p class="section-label">Network Questions and Findings</p>
-                <h2 id="questions-title">What the Visualizations Reveal</h2>
+                <h2 id="questions-title">6. Network Questions and Findings</h2>
                 <ol class="network-findings">
-                    <li><strong>Central stations — Partially, node-link.</strong> Neighbor highlighting shows that Stations 4, 7, 10, 13, 16, 18, 21, 23, 25, 29, 31, 33, 34, and 38 have the maximum degree of three; no station is uniquely central.</li>
-                    <li><strong>District connectivity — Well, adjacency matrix.</strong> District ordering and filled cells show East–South has 11 direct links, ahead of Central–North and East–West with nine each.</li>
-                    <li><strong>Transfer and terminal topology — Well, node-link.</strong> Shape and highlighting show these station types distributed along the chain and among shortcut endpoints, rather than confined to one cluster.</li>
-                    <li><strong>High passenger volume — Well, node-link.</strong> Node area identifies Stations 46–50 as the five highest-volume stations, led by Station 50 at 9,850 daily passengers.</li>
-                    <li><strong>Longest direct connections — Well, both.</strong> Thick links and dark matrix cells identify Station 7–31 (16 minutes), Station 18–34 (15), and Station 29–50 (14).</li>
-                    <li><strong>Route-type concentration — Partially, adjacency matrix.</strong> Cell colors show all three types dispersed; Metro and Shuttle each occur four times between East and South, while Express reaches four links in both Central–North and East–West.</li>
+                    <li><h3>Which stations appear central in the network?</h3><p><strong>Assessment:</strong> Partially. <strong>Best view:</strong> Node-link. <strong>Evidence and finding:</strong> Highlighting reveals fourteen maximum-degree stations, each with three neighbors, so no station is uniquely central.</p></li>
+                    <li><h3>Which districts are strongly connected to one another?</h3><p><strong>Assessment:</strong> Well. <strong>Best view:</strong> Adjacency matrix. <strong>Evidence and finding:</strong> District blocks show 11 East–South links, versus nine Central–North and nine East–West links.</p></li>
+                    <li><h3>Where are transfer or terminal stations located in the topology?</h3><p><strong>Assessment:</strong> Well. <strong>Best view:</strong> Node-link. <strong>Evidence and finding:</strong> Fill treatments and highlighting place both roles along the chain and at shortcut endpoints, not in one cluster.</p></li>
+                    <li><h3>Which stations have high passenger volume?</h3><p><strong>Assessment:</strong> Well. <strong>Best view:</strong> Node-link. <strong>Evidence and finding:</strong> Circle area makes Stations 46–50 the largest, with Station 50 highest at 9,850 daily passengers.</p></li>
+                    <li><h3>Where are the longest direct travel-time connections?</h3><p><strong>Assessment:</strong> Well. <strong>Best view:</strong> Both. <strong>Evidence and finding:</strong> The widest links and darkest cells identify 7–31 (16 minutes), 18–34 (15), and 29–50 (14).</p></li>
+                    <li><h3>Are particular route types concentrated in particular parts of the network?</h3><p><strong>Assessment:</strong> Partially. <strong>Best view:</strong> Adjacency matrix. <strong>Evidence and finding:</strong> RGB cells show broad dispersal; Metro and Shuttle each have four East–South links, while Express has four in Central–North and East–West.</p></li>
                 </ol>
             </section>
         </section>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-    <script src="lab5.js?v=1"></script>
+    <script src="lab5.js?v=2"></script>
 </body>
 </html>
