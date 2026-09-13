@@ -72,7 +72,7 @@ function addLegend() {
 }
 
 function drawNetwork(nodes, routes) {
-    const width = 1180, height = 820;
+    const width = 1280, height = 940;
     const sizeScale = d3.scaleSqrt().domain(d3.extent(nodes, d => d.daily_passengers)).range([8, 27]);
     const linkWidth = d3.scaleLinear().domain(d3.extent(routes, d => d.travel_time_min)).range([1.4, 10]);
     const svg = networkRoot.append("svg").attr("viewBox", `0 0 ${width} ${height}`).attr("role", "img").attr("aria-labelledby", "network-svg-title network-svg-desc");
@@ -112,9 +112,9 @@ function drawNetwork(nodes, routes) {
     }).on("pointerleave blur", function() { d3.select(this).classed("emphasized", false); hideTooltip(networkTooltip); });
 
     const simulation = d3.forceSimulation(networkNodes).randomSource(d3.randomLcg(401))
-        .force("link", d3.forceLink(networkRoutes).id(d => d.id).distance(d => 100 + d.travel_time_min * 6).strength(0.6))
-        .force("charge", d3.forceManyBody().strength(-310)).force("center", d3.forceCenter(width / 2, height / 2))
-        .force("collision", d3.forceCollide().radius(d => sizeScale(d.daily_passengers) + 13));
+        .force("link", d3.forceLink(networkRoutes).id(d => d.id).distance(d => 112 + d.travel_time_min * 6.5).strength(0.6))
+        .force("charge", d3.forceManyBody().strength(-350)).force("center", d3.forceCenter(width / 2, height / 2))
+        .force("collision", d3.forceCollide().radius(d => sizeScale(d.daily_passengers) + 15));
     nodeGroups.call(d3.drag()
         .on("start", (event, d) => { if (!event.active) simulation.alphaTarget(0.3).restart(); d.fx = d.x; d.fy = d.y; })
         .on("drag", (event, d) => { d.fx = Math.max(24, Math.min(width - 24, event.x)); d.fy = Math.max(24, Math.min(height - 24, event.y)); })
@@ -131,10 +131,10 @@ function drawMatrix(nodes, routes) {
     const ids = ordered.map(d => d.id), byId = new Map(nodes.map(d => [d.id, d])), linkMap = new Map();
     routes.forEach(route => { linkMap.set(`${route.source}|${route.target}`, route); linkMap.set(`${route.target}|${route.source}`, route); });
     const matrix = ids.flatMap(row => ids.map(col => ({row, col, route: linkMap.get(`${row}|${col}`) || null})));
-    const width = 820, height = 820, margin = {top: 140, right: 26, bottom: 26, left: 140};
+    const width = 900, height = 900, margin = {top: 88, right: 18, bottom: 18, left: 88};
     const x = d3.scaleBand().domain(ids).range([margin.left, width - margin.right]).paddingInner(0.06);
     const y = d3.scaleBand().domain(ids).range([margin.top, height - margin.bottom]).paddingInner(0.06);
-    const timeOpacity = time => time <= 5 ? 0.25 : time <= 10 ? 0.62 : 1;
+    const timeOpacity = time => time <= 5 ? 0.18 : time <= 10 ? 0.58 : 1;
     const svg = matrixRoot.append("svg").attr("viewBox", `0 0 ${width} ${height}`).attr("role", "img").attr("aria-labelledby", "matrix-svg-title matrix-svg-desc");
     svg.append("title").attr("id", "matrix-svg-title").text("Urban transit adjacency matrix");
     svg.append("desc").attr("id", "matrix-svg-desc").text("Rows and columns are stations ordered by district. Colored cells show direct routes, with route type shown by color and travel time by opacity.");
@@ -148,8 +148,8 @@ function drawMatrix(nodes, routes) {
     svg.selectAll("text.column-label").data(ordered).join("text").attr("class", "matrix-label column-label").attr("transform", d => `translate(${x(d.id) + x.bandwidth() / 2},${margin.top - 12}) rotate(-55)`).attr("text-anchor", "start").text(d => d.id.slice(1));
     svg.selectAll("rect.row-district").data(ordered).join("rect").attr("class", "matrix-district-strip").attr("x", margin.left - 8).attr("y", d => y(d.id)).attr("width", 5).attr("height", y.bandwidth()).attr("fill", d => matrixDistrictColors.get(d.district));
     svg.selectAll("rect.column-district").data(ordered).join("rect").attr("class", "matrix-district-strip").attr("x", d => x(d.id)).attr("y", margin.top - 8).attr("width", x.bandwidth()).attr("height", 5).attr("fill", d => matrixDistrictColors.get(d.district));
-    svg.append("text").attr("class", "matrix-axis-title").attr("x", (margin.left + width - margin.right) / 2).attr("y", 25).attr("text-anchor", "middle").text("Column station ID");
-    svg.append("text").attr("class", "matrix-axis-title").attr("transform", "rotate(-90)").attr("x", -(margin.top + height - margin.bottom) / 2).attr("y", 24).attr("text-anchor", "middle").text("Row station ID");
+    svg.append("text").attr("class", "matrix-axis-title").attr("x", (margin.left + width - margin.right) / 2).attr("y", 20).attr("text-anchor", "middle").text("Column station ID");
+    svg.append("text").attr("class", "matrix-axis-title").attr("transform", "rotate(-90)").attr("x", -(margin.top + height - margin.bottom) / 2).attr("y", 20).attr("text-anchor", "middle").text("Row station ID");
 }
 
 async function createLab5() {

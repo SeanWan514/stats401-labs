@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab 5: Interactive Network Visualization with D3</title>
-    <link rel="stylesheet" href="../css/style.css?v=10">
+    <link rel="stylesheet" href="../css/style.css?v=11">
 </head>
 <body>
     <main class="page-container lab5-page">
@@ -49,7 +49,7 @@
 
             <section class="justification-card lab5-writing" aria-labelledby="node-design-title">
                 <h2 id="node-design-title">3. Node-Link Design Description</h2>
-                <p>District color identifies location; circle area represents daily passengers. Fill distinguishes roles: solid means Terminal, half-filled means Transfer, and outlined means Local. Solid, dashed, and dotted links identify Express, Metro, and Shuttle; width represents travel time. Dragging reduces overlap, highlighting isolates neighbors, and tooltips give exact values.</p>
+                <p>In the node-link view, color identifies district and circle area represents daily passengers on a common scale. Fill distinguishes station roles: solid for Terminal, half-filled for Transfer, and outlined for Local. Solid, dashed, and dotted edges represent Express, Metro, and Shuttle, while width represents travel time. Dragging separates overlaps, highlighting isolates neighbors, and tooltips give exact values.</p>
             </section>
 
             <section class="lab5-section" aria-labelledby="matrix-title">
@@ -64,23 +64,23 @@
 
             <section class="justification-card lab5-writing" aria-labelledby="matrix-design-title">
                 <h2 id="matrix-design-title">5. Matrix Design Description</h2>
-                <p>The same district-grouped order appears on both axes; each filled cell records a connection. Red, green, or blue identifies route type, and three density levels classify travel time. Pink strips preserve district membership; the ordering reveals within- and between-district blocks.</p>
+                <p>The matrix places the same district-grouped order on both axes, so a filled cell identifies a direct connection. Red, green, and blue distinguish Express, Metro, and Shuttle; three density levels classify travel time. Pink axis strips retain district membership. Grouping reveals within- and cross-district patterns.</p>
             </section>
 
             <section class="justification-card lab5-writing" aria-labelledby="questions-title">
                 <h2 id="questions-title">6. Network Questions and Findings</h2>
                 <ol class="network-findings">
-                    <li><h3>Which stations appear central in the network?</h3><p><strong>Assessment:</strong> Partially. <strong>Best view:</strong> Node-link. <strong>Evidence and finding:</strong> Highlighting reveals fourteen maximum-degree stations, each with three neighbors, so no station is uniquely central.</p></li>
-                    <li><h3>Which districts are strongly connected to one another?</h3><p><strong>Assessment:</strong> Well. <strong>Best view:</strong> Adjacency matrix. <strong>Evidence and finding:</strong> District blocks show 11 East–South links, versus nine Central–North and nine East–West links.</p></li>
-                    <li><h3>Where are transfer or terminal stations located in the topology?</h3><p><strong>Assessment:</strong> Well. <strong>Best view:</strong> Node-link. <strong>Evidence and finding:</strong> Fill treatments and highlighting place both roles along the chain and at shortcut endpoints, not in one cluster.</p></li>
-                    <li><h3>Which stations have high passenger volume?</h3><p><strong>Assessment:</strong> Well. <strong>Best view:</strong> Node-link. <strong>Evidence and finding:</strong> Circle area makes Stations 46–50 the largest, with Station 50 highest at 9,850 daily passengers.</p></li>
-                    <li><h3>Where are the longest direct travel-time connections?</h3><p><strong>Assessment:</strong> Well. <strong>Best view:</strong> Both. <strong>Evidence and finding:</strong> The widest links and darkest cells identify 7–31 (16 minutes), 18–34 (15), and 29–50 (14).</p></li>
-                    <li><h3>Are particular route types concentrated in particular parts of the network?</h3><p><strong>Assessment:</strong> Partially. <strong>Best view:</strong> Adjacency matrix. <strong>Evidence and finding:</strong> RGB cells show broad dispersal; Metro and Shuttle each have four East–South links, while Express has four in Central–North and East–West.</p></li>
+                    <li><h3>Which stations appear central in the network?</h3><p>This question can be answered <strong>partially with the node-link view</strong>. Hover highlighting exposes each immediate neighborhood. Fourteen stations share the maximum degree of three, so the visualization does not identify one uniquely central hub.</p></li>
+                    <li><h3>Which districts are strongly connected to one another?</h3><p>This question is answered <strong>well by the adjacency matrix</strong>. The grouped label strips and filled cells reveal 11 East–South connections, compared with nine Central–North and nine East–West connections.</p></li>
+                    <li><h3>Where are transfer or terminal stations located in the topology?</h3><p>This question is answered <strong>well by the node-link view</strong>. The half-filled and solid circles show Transfer and Terminal stations distributed along the main chain and at shortcut endpoints rather than concentrated in one cluster.</p></li>
+                    <li><h3>Which stations have high passenger volume?</h3><p>This question is answered <strong>well by the node-link view</strong>. Circle area makes Stations 46–50 visibly largest, and Station 50 is the leading station with 9,850 daily passengers.</p></li>
+                    <li><h3>Where are the longest direct travel-time connections?</h3><p>This question is answered <strong>well by both views</strong>. The widest edges and darkest matrix cells identify Stations 7–31 at 16 minutes, 18–34 at 15 minutes, and 29–50 at 14 minutes.</p></li>
+                    <li><h3>Are particular route types concentrated in particular parts of the network?</h3><p>This question is answered <strong>partially by the adjacency matrix</strong>. Cell colors show broad dispersal: Metro and Shuttle each have four East–South links, while Express has four links in both Central–North and East–West.</p></li>
                 </ol>
             </section>
         </section>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-    <script src="lab5.js?v=2"></script>
+    <script src="lab5.js?v=3"></script>
 </body>
 </html>

@@ -561,7 +561,7 @@ p {
 .matrix-chart { position: relative; margin-top: 18px; overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; background: #fffafd; }
 .network-chart svg,
 .matrix-chart svg { display: block; width: 100%; height: auto; }
-.network-chart svg { min-width: 920px; }
+.network-chart svg { min-width: 1000px; }
 .matrix-chart svg { min-width: 720px; }
 .network-legend { display: grid; gap: 12px; margin-top: 18px; padding: 16px 18px; background: #fff7fa; border: 1px solid var(--border); border-radius: 10px; color: var(--muted); font-size: .86rem; }
 .legend-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
@@ -582,9 +582,9 @@ p {
 .link-width-example { display: inline-block; width: 48px; border-top: solid #655d66; }
 .link-thin { border-top-width: 2px; }
 .link-wide { border-top-width: 9px; }
-.time-light { background: rgba(57, 120, 197, .25); }
-.time-medium { background: rgba(57, 120, 197, .62); }
-.time-dark { background: rgb(57, 120, 197); }
+.time-light { background: #e1e1e1; }
+.time-medium { background: #929292; }
+.time-dark { background: #353535; }
 .network-links line { stroke-opacity: .56; cursor: pointer; transition: opacity 130ms ease, stroke-width 130ms ease; }
 .network-links line.dimmed { opacity: .06; }
 .network-links line.emphasized { opacity: 1; stroke-width: 9px; }
