@@ -8,7 +8,7 @@ const routeTypeOrder = ["Express", "Metro", "Shuttle"];
 const networkDistrictColors = new Map([["Central", "#747b82"], ["North", "#d84b4b"], ["South", "#32935b"], ["East", "#3978c5"], ["West", "#e0b52e"]]);
 const matrixDistrictColors = new Map([["Central", "#8f1d4d"], ["North", "#b72f69"], ["South", "#d94f7e"], ["East", "#ee82a2"], ["West", "#a45a84"]]);
 const routeColors = new Map([["Express", "#d84b4b"], ["Metro", "#32935b"], ["Shuttle", "#3978c5"]]);
-const routePatterns = new Map([["Express", null], ["Metro", "15,11"], ["Shuttle", "2,7"]]);
+const routePatterns = new Map([["Express", null], ["Metro", "15,11"], ["Shuttle", "0,9"]]);
 
 function tooltipPosition(event, root, mark) {
     const box = root.node().getBoundingClientRect();

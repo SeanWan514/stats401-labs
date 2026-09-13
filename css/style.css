@@ -571,7 +571,7 @@ p {
 .legend-strip { width: 8px; height: 17px; border-radius: 2px; }
 .legend-line { width: 34px; height: 0; border-top: 4px solid #655d66; }
 .legend-line.route-metro { height: 4px; border: 0; background: repeating-linear-gradient(to right, #655d66 0 10px, transparent 10px 18px); }
-.legend-line.route-shuttle { border-top-style: dotted; }
+.legend-line.route-shuttle { height: 6px; border: 0; background: radial-gradient(circle, #655d66 0 2px, transparent 2.2px) left center / 9px 6px repeat-x; }
 .legend-note { flex-basis: 100%; color: var(--accent-dark); font-weight: 700; }
 .station-key { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--accent-dark); border-radius: 50%; background: #fff; }
 .station-terminal { background: var(--accent-dark); }
