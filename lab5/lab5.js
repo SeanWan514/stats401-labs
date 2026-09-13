@@ -8,7 +8,7 @@ const routeTypeOrder = ["Express", "Metro", "Shuttle"];
 const networkDistrictColors = new Map([["Central", "#747b82"], ["North", "#d84b4b"], ["South", "#32935b"], ["East", "#3978c5"], ["West", "#e0b52e"]]);
 const matrixDistrictColors = new Map([["Central", "#8f1d4d"], ["North", "#b72f69"], ["South", "#d94f7e"], ["East", "#ee82a2"], ["West", "#a45a84"]]);
 const routeColors = new Map([["Express", "#d84b4b"], ["Metro", "#32935b"], ["Shuttle", "#3978c5"]]);
-const routePatterns = new Map([["Express", null], ["Metro", "10,6"], ["Shuttle", "2,7"]]);
+const routePatterns = new Map([["Express", null], ["Metro", "15,11"], ["Shuttle", "2,7"]]);
 
 function tooltipPosition(event, root, mark) {
     const box = root.node().getBoundingClientRect();
@@ -72,7 +72,7 @@ function addLegend() {
 }
 
 function drawNetwork(nodes, routes) {
-    const width = 1280, height = 940;
+    const width = 1120, height = 940;
     const sizeScale = d3.scaleSqrt().domain(d3.extent(nodes, d => d.daily_passengers)).range([8, 27]);
     const linkWidth = d3.scaleLinear().domain(d3.extent(routes, d => d.travel_time_min)).range([1.4, 10]);
     const svg = networkRoot.append("svg").attr("viewBox", `0 0 ${width} ${height}`).attr("role", "img").attr("aria-labelledby", "network-svg-title network-svg-desc");
@@ -131,7 +131,7 @@ function drawMatrix(nodes, routes) {
     const ids = ordered.map(d => d.id), byId = new Map(nodes.map(d => [d.id, d])), linkMap = new Map();
     routes.forEach(route => { linkMap.set(`${route.source}|${route.target}`, route); linkMap.set(`${route.target}|${route.source}`, route); });
     const matrix = ids.flatMap(row => ids.map(col => ({row, col, route: linkMap.get(`${row}|${col}`) || null})));
-    const width = 900, height = 900, margin = {top: 88, right: 18, bottom: 18, left: 88};
+    const width = 900, height = 900, margin = {top: 104, right: 18, bottom: 18, left: 88};
     const x = d3.scaleBand().domain(ids).range([margin.left, width - margin.right]).paddingInner(0.06);
     const y = d3.scaleBand().domain(ids).range([margin.top, height - margin.bottom]).paddingInner(0.06);
     const timeOpacity = time => time <= 5 ? 0.18 : time <= 10 ? 0.58 : 1;
@@ -144,11 +144,26 @@ function drawMatrix(nodes, routes) {
         .attr("tabindex", d => d.route ? 0 : null).attr("aria-label", d => d.route ? `${byId.get(d.row).station_name} and ${byId.get(d.col).station_name}: ${d.route.route_type}, ${d.route.travel_time_min} minutes` : null)
         .on("pointerenter focus", function(event, d) { if (d.route) showTooltip(matrixTooltip, matrixRoot, event, this, `<strong>${byId.get(d.row).station_name} – ${byId.get(d.col).station_name}</strong><span>Route: ${d.route.route_type}</span><span>Travel time: ${d.route.travel_time_min} minutes</span>`); })
         .on("pointerleave blur", () => hideTooltip(matrixTooltip));
-    svg.selectAll("text.row-label").data(ordered).join("text").attr("class", "matrix-label row-label").attr("x", margin.left - 12).attr("y", d => y(d.id) + y.bandwidth() / 2).attr("dy", "0.32em").attr("text-anchor", "end").text(d => d.id.slice(1));
-    svg.selectAll("text.column-label").data(ordered).join("text").attr("class", "matrix-label column-label").attr("transform", d => `translate(${x(d.id) + x.bandwidth() / 2},${margin.top - 12}) rotate(-55)`).attr("text-anchor", "start").text(d => d.id.slice(1));
+    svg.selectAll("text.row-label").data(ordered).join("text").attr("class", "matrix-label row-label").attr("x", margin.left - 12).attr("y", d => y(d.id) + y.bandwidth() / 2).attr("dy", "0.32em").attr("text-anchor", "end").style("fill", d => matrixDistrictColors.get(d.district)).text(d => d.id.slice(1));
+    svg.selectAll("text.column-label").data(ordered).join("text").attr("class", "matrix-label column-label").attr("transform", d => `translate(${x(d.id) + x.bandwidth() / 2},${margin.top - 12}) rotate(-55)`).attr("text-anchor", "start").style("fill", d => matrixDistrictColors.get(d.district)).text(d => d.id.slice(1));
     svg.selectAll("rect.row-district").data(ordered).join("rect").attr("class", "matrix-district-strip").attr("x", margin.left - 8).attr("y", d => y(d.id)).attr("width", 5).attr("height", y.bandwidth()).attr("fill", d => matrixDistrictColors.get(d.district));
     svg.selectAll("rect.column-district").data(ordered).join("rect").attr("class", "matrix-district-strip").attr("x", d => x(d.id)).attr("y", margin.top - 8).attr("width", x.bandwidth()).attr("height", 5).attr("fill", d => matrixDistrictColors.get(d.district));
-    svg.append("text").attr("class", "matrix-axis-title").attr("x", (margin.left + width - margin.right) / 2).attr("y", 20).attr("text-anchor", "middle").text("Column station ID");
+    const districtGroups = districtOrder.map(district => {
+        const members = ordered.filter(d => d.district === district);
+        return {district, first: members[0].id, last: members[members.length - 1].id};
+    });
+    svg.selectAll("text.matrix-district-heading").data(districtGroups).join("text")
+        .attr("class", "matrix-district-heading")
+        .attr("x", d => (x(d.first) + x(d.last) + x.bandwidth()) / 2)
+        .attr("y", 44).attr("text-anchor", "middle")
+        .attr("fill", d => matrixDistrictColors.get(d.district)).text(d => d.district.toUpperCase());
+    districtGroups.slice(1).forEach(group => {
+        const boundaryX = x(group.first) - x.step() * 0.03;
+        const boundaryY = y(group.first) - y.step() * 0.03;
+        svg.append("line").attr("class", "matrix-group-boundary").attr("x1", boundaryX).attr("x2", boundaryX).attr("y1", margin.top).attr("y2", height - margin.bottom);
+        svg.append("line").attr("class", "matrix-group-boundary").attr("x1", margin.left).attr("x2", width - margin.right).attr("y1", boundaryY).attr("y2", boundaryY);
+    });
+    svg.append("text").attr("class", "matrix-axis-title").attr("x", (margin.left + width - margin.right) / 2).attr("y", 18).attr("text-anchor", "middle").text("Column station ID");
     svg.append("text").attr("class", "matrix-axis-title").attr("transform", "rotate(-90)").attr("x", -(margin.top + height - margin.bottom) / 2).attr("y", 20).attr("text-anchor", "middle").text("Row station ID");
 }
 

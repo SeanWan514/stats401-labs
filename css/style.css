@@ -561,7 +561,7 @@ p {
 .matrix-chart { position: relative; margin-top: 18px; overflow-x: auto; border: 1px solid var(--border); border-radius: 12px; background: #fffafd; }
 .network-chart svg,
 .matrix-chart svg { display: block; width: 100%; height: auto; }
-.network-chart svg { min-width: 1000px; }
+.network-chart svg { min-width: 100%; }
 .matrix-chart svg { min-width: 720px; }
 .network-legend { display: grid; gap: 12px; margin-top: 18px; padding: 16px 18px; background: #fff7fa; border: 1px solid var(--border); border-radius: 10px; color: var(--muted); font-size: .86rem; }
 .legend-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
@@ -570,7 +570,7 @@ p {
 .legend-swatch { width: 13px; height: 13px; border-radius: 3px; border: 1px solid rgba(80, 13, 43, .24); }
 .legend-strip { width: 8px; height: 17px; border-radius: 2px; }
 .legend-line { width: 34px; height: 0; border-top: 4px solid #655d66; }
-.legend-line.route-metro { border-top-style: dashed; }
+.legend-line.route-metro { height: 4px; border: 0; background: repeating-linear-gradient(to right, #655d66 0 10px, transparent 10px 18px); }
 .legend-line.route-shuttle { border-top-style: dotted; }
 .legend-note { flex-basis: 100%; color: var(--accent-dark); font-weight: 700; }
 .station-key { display: inline-block; width: 16px; height: 16px; border: 2px solid var(--accent-dark); border-radius: 50%; background: #fff; }
@@ -603,6 +603,8 @@ p {
 .matrix-cell.connected:focus { stroke: var(--text); stroke-width: 2px; outline: none; }
 .matrix-label { fill: var(--muted); font-size: 8.5px; font-weight: 700; }
 .matrix-axis-title { fill: var(--text); font-size: 14px; font-weight: 800; }
+.matrix-district-heading { font-size: 11px; font-weight: 900; letter-spacing: .08em; }
+.matrix-group-boundary { stroke: #756a70; stroke-width: 1.4px; stroke-opacity: .62; pointer-events: none; }
 .network-findings { display: grid; gap: 18px; margin: 14px 0 0; padding-left: 22px; color: var(--muted); }
 .network-findings h3 { margin: 0 0 6px; color: var(--text); font-size: 1rem; }
 .network-findings p { margin: 0; }
