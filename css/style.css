@@ -614,6 +614,32 @@ p {
 .lab5-dataset { margin-top: 34px; }
 .lab5-dataset .dataset-summary { margin-bottom: 0; }
 
+.lab6-section { margin-top: 38px; }
+.gdp-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 22px; padding: 16px 18px; color: var(--muted); background: #fff7fa; border: 1px solid var(--border); border-radius: 10px; }
+.gdp-legend-item { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; }
+.gdp-legend-item i { width: 18px; height: 18px; border: 1px solid rgba(80, 13, 43, .24); border-radius: 4px; }
+.gdp-size-note { color: var(--accent-dark); font-weight: 800; }
+.treemap-chart { position: relative; margin-top: 18px; overflow-x: auto; background: #fffafd; border: 1px solid var(--border); border-radius: 12px; }
+.treemap-chart svg { display: block; width: 100%; min-width: 760px; height: auto; }
+.country-cell { cursor: pointer; outline: none; }
+.country-cell rect { stroke: #fff; stroke-width: 2px; transition: filter 130ms ease, stroke-width 130ms ease; }
+.country-cell:hover rect,
+.country-cell:focus rect,
+.country-cell.active rect { filter: brightness(.9); stroke: var(--text); stroke-width: 4px; }
+.country-label,
+.country-value { fill: #351724; stroke: rgba(255,255,255,.88); stroke-width: 3px; paint-order: stroke; pointer-events: none; }
+.country-label { font-size: 13px; font-weight: 900; }
+.country-value { font-size: 11px; font-weight: 700; }
+.hierarchy-containers { pointer-events: none; }
+.hierarchy-container rect { fill: none; stroke: var(--accent-dark); }
+.hierarchy-container.depth-1 rect { stroke-width: 4px; }
+.hierarchy-container.depth-2 rect { stroke-width: 1.8px; stroke-dasharray: 5 3; }
+.hierarchy-container text { fill: var(--accent-dark); stroke: #fffafd; stroke-width: 4px; paint-order: stroke; font-weight: 900; }
+.hierarchy-container.depth-1 text { font-size: 14px; }
+.hierarchy-container.depth-2 text { font-size: 11px; }
+.treemap-tooltip { min-width: 225px; }
+.lab6-writing p { line-height: 1.68; }
+
 @media (max-width: 640px) {
     .page-container {
         padding-top: 32px;
