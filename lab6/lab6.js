@@ -1,8 +1,8 @@
 const statusOrder = ["Increase", "Unchanged", "Decrease"];
 const statusColors = new Map([
-    ["Increase", "#df668b"],
-    ["Unchanged", "#f2b8ca"],
-    ["Decrease", "#7d234f"]
+    ["Increase", "#f6aaa9"],
+    ["Unchanged", "#f8e3a0"],
+    ["Decrease", "#b6dfc2"]
 ]);
 
 function topAncestor(node, depth) {
@@ -36,12 +36,12 @@ function drawLegend() {
         item.append("i").style("background", statusColors.get(status));
         item.append("span").text(status);
     });
-    legend.append("span").attr("class", "gdp-size-note").text("Larger rectangle = greater GDP");
+    legend.append("span").attr("class", "gdp-size-note").text("Larger Area of Rectangle = Greater GDP");
 }
 
 function drawTreemap(data, selector, tooltipSelector, tile, title, description) {
-    const width = 1080;
-    const height = 650;
+    const width = 1280;
+    const height = 880;
     const root = d3.hierarchy(data)
         .sum(node => node.gdp || 0)
         .sort((a, b) => b.value - a.value || d3.ascending(a.data.name, b.data.name));

@@ -619,6 +619,7 @@ p {
 .gdp-legend-item { display: inline-flex; align-items: center; gap: 7px; font-weight: 700; }
 .gdp-legend-item i { width: 18px; height: 18px; border: 1px solid rgba(80, 13, 43, .24); border-radius: 4px; }
 .gdp-size-note { color: var(--accent-dark); font-weight: 800; }
+.lab6-page { width: min(1300px, calc(100% - 32px)); }
 .treemap-chart { position: relative; margin-top: 18px; overflow-x: auto; background: #fffafd; border: 1px solid var(--border); border-radius: 12px; }
 .treemap-chart svg { display: block; width: 100%; min-width: 760px; height: auto; }
 .country-cell { cursor: pointer; outline: none; }

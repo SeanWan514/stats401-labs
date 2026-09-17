@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab 6: Hierarchical Data Visualization</title>
-    <link rel="stylesheet" href="../css/style.css?v=14">
+    <link rel="stylesheet" href="../css/style.css?v=15">
 </head>
 <body>
     <main class="page-container lab6-page">
@@ -25,13 +25,13 @@
         <section class="content-card lab-card">
             <p class="course-label">STATS 401 &middot; Lab 6</p>
             <h1>Hierarchical Data Visualization: Trees and Treemaps</h1>
-            <p class="chart-description">Two treemap layouts represent the same global GDP hierarchy while revealing how segmentation strategy changes comparison and readability.</p>
+            <p class="chart-description">For this lab, I first used Python to convert continent, area, and country into nested JSON, then based on that I built two different treemap layouts to represent the same global GDP hierarchy, while visualizing how segmentation strategies can change comparison and readability.</p>
 
             <div class="dataset-summary" aria-label="Dataset summary">
                 <span><strong>Hierarchy</strong> World &rarr; Continent &rarr; Area &rarr; Country</span>
-                <span><strong>Countries</strong> 27 observations</span>
-                <span><strong>Size encoding</strong> GDP in billions of U.S. dollars</span>
-                <span><strong>Color encoding</strong> GDP status</span>
+                <span><strong>Countries</strong> 27 Countries</span>
+                <span><strong>Size Encoding</strong> GDP in billions of U.S. dollars ($)</span>
+                <span><strong>Color Encoding</strong> GDP status (Increase/Unchanged/Decrease)</span>
             </div>
 
             <section class="lab6-section" aria-labelledby="legend-title">
@@ -42,7 +42,7 @@
             <section class="lab6-section" aria-labelledby="squarify-title">
                 <p class="section-label">Treemap 1</p>
                 <h2 id="squarify-title">Squarified Treemap</h2>
-                <p class="chart-description">The squarified layout favors compact rectangles, supporting country-level GDP comparisons. Hover over or focus a country for exact hierarchical and GDP details.</p>
+                <p class="chart-description">Notice that the squarified layout favors compact rectangles, therefore supporting country-level GDP comparisons. Feel free to hover over or focus a country for exact hierarchical and GDP details!</p>
                 <div id="treemap-squarify" class="treemap-chart">
                     <div id="tooltip-squarify" class="chart-tooltip treemap-tooltip" role="status" aria-live="polite"></div>
                 </div>
@@ -51,7 +51,7 @@
             <section class="lab6-section" aria-labelledby="slice-title">
                 <p class="section-label">Treemap 2</p>
                 <h2 id="slice-title">Slice-and-Dice Treemap</h2>
-                <p class="chart-description">The slice-and-dice layout alternates subdivision direction by depth, making the hierarchy's nested bands especially visible.</p>
+                <p class="chart-description">This slice-and-dice layout alternates subdivision direction by depth, making the hierarchy's nested bands especially visible. Also feel free to hover over or focus a country for exact hierarchical and GDP details!</p>
                 <div id="treemap-slice" class="treemap-chart">
                     <div id="tooltip-slice" class="chart-tooltip treemap-tooltip" role="status" aria-live="polite"></div>
                 </div>
@@ -60,12 +60,12 @@
             <section class="justification-card lab6-writing" aria-labelledby="design-title">
                 <p class="section-label">Design Description</p>
                 <h2 id="design-title">Why These Encodings Work</h2>
-                <p>Both treemaps map GDP to rectangle area because area directly communicates each country's contribution to the total. A shared categorical color scale maps Increase, Unchanged, and Decrease to coral pink, light pink, and deep plum, allowing status comparisons without changing the quantitative area encoding. Continent and area outlines preserve the World–continent–area–country hierarchy, while labels and tooltips identify individual countries and provide exact GDP values. The squarified layout creates relatively compact rectangles, making country areas and labels easier to compare across the display. In contrast, slice-and-dice alternates horizontal and vertical subdivision by depth. Its elongated bands make parent–child nesting clearer, but smaller countries can become narrow and harder to compare. Showing both methods with identical data and encodings isolates the effect of segmentation strategy: Squarify supports value comparison, whereas SliceDice emphasizes hierarchical structure.</p>
+                <p>Both treemaps use the same Python-generated hierarchy: World contains continents, each continent contains areas, and each area contains countries. GDP supplies each country's layout weight, so larger rectangles indicate greater GDP and enclosing groups summarize their descendants. A shared categorical palette uses light red for Increase, light yellow for Unchanged, and light green for Decrease. These colors distinguish the supplied GDP-status categories; they do not encode GDP magnitude. Solid continent outlines, dashed area outlines, and available group labels clarify the nesting. Country labels identify observations where space permits, while hover and keyboard-focus tooltips always provide the country, continent, area, exact GDP, and status. Squarify favors compact rectangles, generally making relative areas and country labels easier to compare. Slice-and-dice alternates subdivision direction at successive hierarchy levels, emphasizing nested bands but producing narrow rectangles for some smaller countries. The enlarged canvases improve readability without changing the data or encodings. Using identical data, colors, and interactions in both views makes segmentation strategy the principal difference and exposes the trade-off between compact value comparisons and visible hierarchical subdivision.</p>
             </section>
         </section>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-    <script src="lab6.js?v=1"></script>
+    <script src="lab6.js?v=2"></script>
 </body>
 </html>
