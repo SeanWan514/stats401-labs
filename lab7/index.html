@@ -3,16 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab 7</title>
-    <link rel="stylesheet" href="../css/style.css?v=2">
+    <title>Lab 7: Temporal Data Visualization with D3</title>
+    <link rel="stylesheet" href="../css/style.css?v=16">
 </head>
 <body>
-    <main class="page-container">
-        <section class="content-card placeholder-card">
-            <h1>Lab 7</h1>
-            <p>Oops! Seems like Lab 7 has not yet been added. Please check back later.</p>
-            <a class="back-link" href="../index.html">Back to home</a>
+    <main class="page-container lab7-page">
+        <a class="back-link" href="../index.html">&larr; Back to home</a>
+        <nav class="lab-nav compact-nav" aria-label="Lab navigation">
+            <a href="../lab1/index.html">Lab 1</a>
+            <a href="../lab2/index.html">Lab 2</a>
+            <a href="../lab3/index.html">Lab 3</a>
+            <a href="../lab4/index.html">Lab 4</a>
+            <a href="../lab5/index.html">Lab 5</a>
+            <a href="../lab6/index.html">Lab 6</a>
+            <a class="active" href="../lab7/index.html" aria-current="page">Lab 7</a>
+            <a href="../lab8/index.html">Lab 8</a>
+            <a href="../lab9/index.html">Lab 9</a>
+            <a href="../lab10/index.html">Lab 10</a>
+        </nav>
+
+        <section class="content-card lab-card">
+            <p class="course-label">STATS 401 &middot; Lab 7</p>
+            <h1>Temporal Data Visualization with D3</h1>
+            <p class="chart-description">This animated commercial network shows how twelve companies and their transaction relationships change across sixty days. Use the playback controls or select a specific day to examine connectivity, commercial activity, and cross-regional structure.</p>
+
+            <section class="lab7-section" aria-labelledby="dataset-title">
+                <p class="section-label">1. Dataset</p>
+                <h2 id="dataset-title">Dataset Description</h2>
+                <p class="chart-description">The two provided synthetic datasets contain 12 fabricated companies and 367 undirected commercial transaction records from January 1 through March 1, 2026. Company records supply sector and region, while each transaction records its day, endpoints, U.S.-dollar amount, type, and count. The data are intended only for visualization practice and do not represent real companies or transactions.</p>
+                <div class="dataset-summary" aria-label="Dataset summary">
+                    <span><strong>Companies</strong> 12 nodes</span>
+                    <span><strong>Transactions</strong> 367 daily records</span>
+                    <span><strong>Time span</strong> 60 days</span>
+                    <span><strong>Relationship</strong> Undirected commercial links</span>
+                </div>
+            </section>
+
+            <section class="lab7-section" aria-labelledby="network-title">
+                <p class="section-label">2. Animated Network</p>
+                <h2 id="network-title">Temporal Commercial Network</h2>
+                <p class="chart-description">Press Play to animate the network, pause on a frame, reset to Day 1, or drag the slider to inspect any day manually. Hover over or focus a company or relationship for exact details; hover over a company to emphasize its current neighbors.</p>
+
+                <div class="temporal-controls" aria-label="Animation controls">
+                    <div class="playback-buttons">
+                        <button id="play-button" type="button">&#9654; Play</button>
+                        <button id="pause-button" type="button">&#10074;&#10074; Pause</button>
+                        <button id="reset-button" type="button">&#8634; Reset</button>
+                    </div>
+                    <label class="time-slider-control" for="time-slider">
+                        <span>Choose a day</span>
+                        <input id="time-slider" type="range" min="1" max="60" value="1" step="1">
+                    </label>
+                    <div class="current-time" aria-live="polite">
+                        <strong id="current-day">Day 1 of 60</strong>
+                        <span id="current-date">January 1, 2026</span>
+                    </div>
+                </div>
+
+                <div id="network-status" class="network-status" role="status" aria-live="polite">Loading the temporal network&hellip;</div>
+                <div id="temporal-network" class="temporal-network-chart">
+                    <div id="temporal-tooltip" class="chart-tooltip temporal-tooltip" role="status" aria-live="polite"></div>
+                </div>
+
+                <div id="day-summary" class="day-summary" aria-label="Current day summary">
+                    <span><strong id="active-companies">&mdash;</strong> Active companies</span>
+                    <span><strong id="active-links">&mdash;</strong> Active links</span>
+                    <span><strong id="daily-value">&mdash;</strong> Transaction value</span>
+                    <span><strong id="daily-count">&mdash;</strong> Transactions represented</span>
+                </div>
+            </section>
+
+            <section class="lab7-section" aria-labelledby="legend-title">
+                <p class="section-label">3. Encoding Guide</p>
+                <h2 id="legend-title">How to Read the Network</h2>
+                <div id="temporal-legend" class="network-legend temporal-legend"></div>
+            </section>
+
+            <section class="justification-card lab7-writing" aria-labelledby="design-title">
+                <p class="section-label">4. Design Description</p>
+                <h2 id="design-title">Design and Interaction Rationale</h2>
+                <p>Company sector is encoded by node color, region by node border pattern, and current transaction volume by node area. These choices preserve a constant company identity while letting size reveal which firms are commercially active on the selected day. Link color represents transaction type, width represents dollar amount, and opacity represents transaction count. Entering relationships fade in and inactive relationships fade out, making structural change explicit.</p>
+                <p>The same company objects and positions persist across frames. The force-directed layout is calculated from the complete network once, then reused, so the viewer can follow companies without relearning the layout every day. Playback provides an overview, while Pause, Reset, and the 60-day slider support close comparison. Tooltips provide exact values, and the daily summary reports active companies, active links, total value, and transaction count for the current frame.</p>
+            </section>
+
+            <section class="justification-card lab7-writing" aria-labelledby="questions-title">
+                <p class="section-label">5. Temporal-Network Analysis</p>
+                <h2 id="questions-title">Questions and Findings</h2>
+                <ol class="temporal-findings">
+                    <li>
+                        <h3>How does overall network connectivity change across the 60 days?</h3>
+                        <p>The network becomes more active in the final third. Days 1&ndash;20 average 5.50 active links and 8.55 active companies, compared with 7.25 links and 9.65 companies on Days 41&ndash;60. The daily summary and the number of visible links make this increase apparent. Day 1 has the minimum of three links, while Day 45 has the maximum of ten.</p>
+                    </li>
+                    <li>
+                        <h3>Which companies become more central or commercially active over time?</h3>
+                        <p>Fusion Electronics is the dominant company through the first forty days: its node is repeatedly among the largest and most connected. During Days 41&ndash;60, Ion Systems and Cedar Retail become more prominent. Their expanding nodes and larger current neighborhoods show this shift; Ion Systems has the highest late-period transaction volume.</p>
+                    </li>
+                    <li>
+                        <h3>Are there periods when the network consists of relatively separate clusters?</h3>
+                        <p>Yes. The earliest days are especially fragmented. On Day 1, three disconnected pairs are visible and six companies are inactive; Days 3 and 9 each show four separate pairs. Later frames usually contain more active firms, although multiple components remain visible. Stable positions make these separated groups easier to compare from one day to the next.</p>
+                    </li>
+                    <li>
+                        <h3>Which commercial relationships appear, disappear, or become stronger over time?</h3>
+                        <p>Relationships repeatedly enter and leave the network, which is visible through link fade transitions. The Delta Components&ndash;Fusion Electronics relationship appears on 20 days and has the largest cumulative value, while Ion Systems&ndash;Lumen Distribution and Apex Textiles&ndash;BlueRiver Logistics also recur on 20 days. Link width shows when one of these relationships carries a larger daily amount.</p>
+                    </li>
+                    <li>
+                        <h3>Does the network become more or less cross-regional over time?</h3>
+                        <p>It becomes more cross-regional overall. Cross-regional links increase from an average share of 56% on Days 1&ndash;20 to 63% on Days 21&ndash;40 and 72% on Days 41&ndash;60. Comparing the region-specific node borders at each link endpoint reveals this pattern, while link tooltips identify the participating companies.</p>
+                    </li>
+                </ol>
+            </section>
         </section>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="lab7.js?v=1"></script>
 </body>
 </html>
