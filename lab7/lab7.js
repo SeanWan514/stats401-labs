@@ -3,15 +3,15 @@ const tooltip = d3.select("#temporal-tooltip");
 const statusMessage = d3.select("#network-status");
 const slider = d3.select("#time-slider");
 const formatDate = d3.timeFormat("%B %-d, %Y");
-const formatCurrency = d3.format("$,.0f");
+const formatCurrency = d3.format("$,.2f");
 const sectorOrder = ["Manufacturing", "Logistics", "Retail", "Food", "Technology", "Wholesale", "Materials"];
 const regionOrder = ["Asia", "North America", "Europe"];
 const transactionOrder = ["goods", "shipping", "components", "materials", "services"];
 const sectorColors = new Map([
-    ["Manufacturing", "#d94f7e"], ["Logistics", "#8f1d4d"], ["Retail", "#f28da9"],
-    ["Food", "#f4b6c8"], ["Technology", "#b72f69"], ["Wholesale", "#a45a84"], ["Materials", "#6f2447"]
+    ["Manufacturing", "#73a8d4"], ["Logistics", "#ff9f80"], ["Retail", "#c7a5e8"],
+    ["Food", "#e6c86e"], ["Technology", "#8bd3b5"], ["Wholesale", "#9aa5b1"], ["Materials", "#e89ac7"]
 ]);
-const regionDash = new Map([["Asia", null], ["North America", "8,4"], ["Europe", "2,3"]]);
+const regionDash = new Map([["Asia", null], ["North America", "16,7"], ["Europe", "0,7"]]);
 const transactionColors = new Map([
     ["goods", "#d84b65"], ["shipping", "#2e7d8f"], ["components", "#7b4eb2"],
     ["materials", "#cf8b2f"], ["services", "#3b8c62"]
@@ -51,30 +51,30 @@ function pairKey(source, target) {
 function addLegend() {
     const legend = d3.select("#temporal-legend");
     const sectorRow = legend.append("div").attr("class", "legend-row");
-    sectorRow.append("strong").text("Company sector / node color");
+    sectorRow.append("strong").text("Company Sector (Node Color)");
     sectorOrder.forEach(sector => {
         const item = sectorRow.append("span").attr("class", "legend-item");
         item.append("i").attr("class", "legend-swatch").style("background", sectorColors.get(sector));
         item.append("span").text(sector);
     });
     const regionRow = legend.append("div").attr("class", "legend-row");
-    regionRow.append("strong").text("Company region / border pattern");
+    regionRow.append("strong").text("Company Region (Border Pattern)");
     regionOrder.forEach(region => {
         const item = regionRow.append("span").attr("class", "legend-item");
         const sample = item.append("svg").attr("class", "region-key").attr("viewBox", "0 0 24 24").attr("aria-hidden", "true");
-        sample.append("circle").attr("cx", 12).attr("cy", 12).attr("r", 8).attr("fill", "#fff").attr("stroke", "#54122f").attr("stroke-width", 3).attr("stroke-dasharray", regionDash.get(region));
+        sample.append("circle").attr("cx", 12).attr("cy", 12).attr("r", 8).attr("fill", "#fff").attr("stroke", "#54122f").attr("stroke-width", 3).attr("stroke-dasharray", regionDash.get(region)).attr("stroke-linecap", region === "Europe" ? "round" : "butt");
         item.append("span").text(region);
     });
     const transactionRow = legend.append("div").attr("class", "legend-row");
-    transactionRow.append("strong").text("Transaction type / link color");
+    transactionRow.append("strong").text("Transaction Type (Link Color)");
     transactionOrder.forEach(type => {
         const item = transactionRow.append("span").attr("class", "legend-item");
         item.append("i").attr("class", "legend-line").style("border-top-color", transactionColors.get(type));
         item.append("span").text(type[0].toUpperCase() + type.slice(1));
     });
-    legend.append("div").attr("class", "legend-row legend-scale-row").html('<strong>Current volume / node area</strong><span class="temporal-node-size temporal-node-small"></span><span>Lower daily volume</span><span class="temporal-node-size temporal-node-large"></span><span>Higher daily volume</span>');
-    legend.append("div").attr("class", "legend-row legend-scale-row").html('<strong>Amount / link width</strong><span class="link-width-example link-thin"></span><span>Lower amount</span><span class="link-width-example link-wide"></span><span>Higher amount</span>');
-    legend.append("div").attr("class", "legend-note").text("More opaque link = greater transaction count · Fading marks = relationships entering or leaving the selected day");
+    legend.append("div").attr("class", "legend-row legend-scale-row").html('<strong>Current Volume (Node Area)</strong><span class="temporal-node-size temporal-node-small"></span><span>Lower daily volume</span><span class="temporal-node-size temporal-node-large"></span><span>Higher daily volume</span>');
+    legend.append("div").attr("class", "legend-row legend-scale-row").html('<strong>Amount (Link Width)</strong><span class="link-width-example link-thin"></span><span>Lower amount</span><span class="link-width-example link-wide"></span><span>Higher amount</span>');
+    legend.append("div").attr("class", "legend-note").text("More Opaque Links = Greater Transaction Counts · Fading Marks = Relationships Entering or Leaving the Selected Day");
 }
 
 function calculateActivity(dayLinks) {
@@ -189,34 +189,32 @@ function initializeNetwork() {
         const key = pairKey(link.source, link.target);
         if (!allPairs.has(key)) allPairs.set(key, {source: link.source, target: link.target});
     });
-    const regionCenters = new Map([
-        ["Asia", {x: width * .28, y: height * .46}],
-        ["North America", {x: width * .72, y: height * .32}],
-        ["Europe", {x: width * .65, y: height * .72}]
-    ]);
+    const targetPositions = [
+        {x: 135, y: 145}, {x: 435, y: 125}, {x: 745, y: 125}, {x: 1045, y: 145},
+        {x: 135, y: 380}, {x: 435, y: 365}, {x: 745, y: 365}, {x: 1045, y: 380},
+        {x: 135, y: 625}, {x: 435, y: 640}, {x: 745, y: 640}, {x: 1045, y: 625}
+    ];
     const maximumDailyVolume = d3.max(d3.groups(transactions, link => link.day), ([, links]) => d3.max(calculateActivity(links).values(), value => value.volume));
-    volumeScale = d3.scaleSqrt().domain([0, maximumDailyVolume]).range([10, 36]);
-    amountScale = d3.scaleLinear().domain(d3.extent(transactions, link => link.amount_usd)).range([1.5, 10]);
+    volumeScale = d3.scaleSqrt().domain([0, maximumDailyVolume]).range([8, 48]);
+    amountScale = d3.scaleLinear().domain(d3.extent(transactions, link => link.amount_usd)).range([1, 14]);
     countScale = d3.scaleLinear().domain(d3.extent(transactions, link => link.transaction_count)).range([.42, .95]);
 
     const svg = chartRoot.append("svg").attr("viewBox", `0 0 ${width} ${height}`).attr("role", "img").attr("aria-labelledby", "temporal-svg-title temporal-svg-desc");
     svg.append("title").attr("id", "temporal-svg-title").text("Animated 60-day commercial transaction network");
     svg.append("desc").attr("id", "temporal-svg-desc").text("Twelve companies retain stable positions while daily commercial relationships appear and disappear. Node appearance encodes company attributes and current activity; link appearance encodes transaction attributes.");
-    const regionLayer = svg.append("g").attr("class", "region-guides").attr("aria-hidden", "true");
-    regionCenters.forEach((center, region) => regionLayer.append("text").attr("x", center.x).attr("y", center.y - 155).text(region));
     linkLayer = svg.append("g").attr("class", "temporal-links");
     nodeSelection = svg.append("g").attr("class", "temporal-nodes").selectAll("g").data(companies, company => company.id).join("g")
         .attr("class", "temporal-node").attr("tabindex", 0).attr("role", "button");
-    nodeSelection.append("circle").attr("r", 10).attr("fill", company => sectorColors.get(company.sector)).attr("stroke-dasharray", company => regionDash.get(company.region));
+    nodeSelection.append("circle").attr("r", 8).attr("fill", company => sectorColors.get(company.sector)).attr("stroke-dasharray", company => regionDash.get(company.region)).attr("stroke-linecap", company => company.region === "Europe" ? "round" : "butt");
     nodeSelection.append("text").attr("class", "company-label").attr("text-anchor", "middle").attr("y", -18).text(company => company.company_name);
 
     const simulation = d3.forceSimulation(companies).randomSource(d3.randomLcg(401))
-        .force("link", d3.forceLink([...allPairs.values()]).id(company => company.id).distance(150).strength(.12))
-        .force("charge", d3.forceManyBody().strength(-580))
-        .force("x", d3.forceX(company => regionCenters.get(company.region).x).strength(.16))
-        .force("y", d3.forceY(company => regionCenters.get(company.region).y).strength(.16))
-        .force("collision", d3.forceCollide(58)).stop();
-    for (let index = 0; index < 360; index += 1) simulation.tick();
+        .force("link", d3.forceLink([...allPairs.values()]).id(company => company.id).distance(190).strength(.035))
+        .force("charge", d3.forceManyBody().strength(-850))
+        .force("x", d3.forceX((company, index) => targetPositions[index].x).strength(.42))
+        .force("y", d3.forceY((company, index) => targetPositions[index].y).strength(.42))
+        .force("collision", d3.forceCollide(76)).stop();
+    for (let index = 0; index < 500; index += 1) simulation.tick();
     companies.forEach(company => {
         company.x = Math.max(75, Math.min(width - 75, company.x));
         company.y = Math.max(70, Math.min(height - 70, company.y));

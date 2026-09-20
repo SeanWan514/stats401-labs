@@ -656,7 +656,6 @@ p {
 .network-status.ready { color: #326b4d; }
 .temporal-network-chart { position: relative; overflow: hidden; background: #fffafd; border: 1px solid var(--border); border-radius: 12px; }
 .temporal-network-chart svg { display: block; width: 100%; height: auto; }
-.region-guides text { fill: #a87489; font-size: 16px; font-weight: 900; letter-spacing: .12em; text-anchor: middle; text-transform: uppercase; }
 .temporal-link { cursor: pointer; stroke-linecap: round; transition: opacity 150ms ease; }
 .temporal-link.dimmed { opacity: .07 !important; }
 .temporal-link.emphasized { stroke: var(--text); stroke-opacity: 1 !important; }
@@ -675,8 +674,10 @@ p {
 .temporal-legend .legend-row strong { min-width: 225px; }
 .region-key { width: 24px; height: 24px; overflow: visible; }
 .temporal-node-size { display: inline-block; background: #d94f7e; border: 3px solid #54122f; border-radius: 50%; }
-.temporal-node-small { width: 15px; height: 15px; }
-.temporal-node-large { width: 34px; height: 34px; }
+.temporal-node-small { width: 12px; height: 12px; }
+.temporal-node-large { width: 44px; height: 44px; }
+.temporal-legend .link-thin { border-top-width: 1px; }
+.temporal-legend .link-wide { border-top-width: 14px; }
 .lab7-writing p,
 .lab7-writing li { line-height: 1.68; }
 .temporal-findings { display: grid; gap: 22px; margin: 18px 0 0; padding-left: 24px; color: var(--muted); }
