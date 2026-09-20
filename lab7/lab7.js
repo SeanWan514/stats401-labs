@@ -190,9 +190,9 @@ function initializeNetwork() {
         if (!allPairs.has(key)) allPairs.set(key, {source: link.source, target: link.target});
     });
     const targetPositions = [
-        {x: 135, y: 145}, {x: 435, y: 125}, {x: 745, y: 125}, {x: 1045, y: 145},
-        {x: 135, y: 380}, {x: 435, y: 365}, {x: 745, y: 365}, {x: 1045, y: 380},
-        {x: 135, y: 625}, {x: 435, y: 640}, {x: 745, y: 640}, {x: 1045, y: 625}
+        {x: 115, y: 120}, {x: 385, y: 185}, {x: 690, y: 105}, {x: 1035, y: 190},
+        {x: 220, y: 340}, {x: 510, y: 295}, {x: 830, y: 390}, {x: 1090, y: 315},
+        {x: 120, y: 620}, {x: 410, y: 555}, {x: 720, y: 665}, {x: 1015, y: 575}
     ];
     const maximumDailyVolume = d3.max(d3.groups(transactions, link => link.day), ([, links]) => d3.max(calculateActivity(links).values(), value => value.volume));
     volumeScale = d3.scaleSqrt().domain([0, maximumDailyVolume]).range([8, 48]);
