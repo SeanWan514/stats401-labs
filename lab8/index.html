@@ -3,16 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab 8</title>
-    <link rel="stylesheet" href="../css/style.css?v=2">
+    <title>Lab 8: Web Text Data and Visualization</title>
+    <link rel="stylesheet" href="../css/style.css?v=17">
 </head>
 <body>
-    <main class="page-container">
-        <section class="content-card placeholder-card">
-            <h1>Lab 8</h1>
-            <p>Oops! Seems like Lab 8 has not yet been added. Please check back later.</p>
-            <a class="back-link" href="../index.html">Back to home</a>
+    <main class="page-container lab8-page">
+        <a class="back-link" href="../index.html">&larr; Back to home</a>
+        <nav class="lab-nav compact-nav" aria-label="Lab navigation">
+            <a href="../lab1/index.html">Lab 1</a><a href="../lab2/index.html">Lab 2</a>
+            <a href="../lab3/index.html">Lab 3</a><a href="../lab4/index.html">Lab 4</a>
+            <a href="../lab5/index.html">Lab 5</a><a href="../lab6/index.html">Lab 6</a>
+            <a href="../lab7/index.html">Lab 7</a>
+            <a class="active" href="../lab8/index.html" aria-current="page">Lab 8</a>
+            <a href="../lab9/index.html">Lab 9</a><a href="../lab10/index.html">Lab 10</a>
+        </nav>
+
+        <section class="content-card lab-card">
+            <p class="course-label">STATS 401 &middot; Lab 8</p>
+            <h1>Web Text Data and Visualization: Exploring a Large Bulletin</h1>
+            <p class="chart-description">This interactive system connects the formal organization of DKU&rsquo;s 400-page undergraduate bulletin with the semantic structure of 1,738 cleaned passages. Search, filter, zoom, inspect passages, compare topics across sections, and follow semantic neighbors between the coordinated views.</p>
+
+            <section class="lab8-section" aria-labelledby="corpus-title">
+                <p class="section-label">1. Bulletin / Corpus Description</p>
+                <h2 id="corpus-title">Source, Passage Units, and Preparation</h2>
+                <p>The corpus comes from the <em>Bulletin of Duke Kunshan University Undergraduate Instruction, 2021&ndash;2022</em>, accessed September 22, 2026 from the <a href="https://dku-web-admissions.s3.cn-north-1.amazonaws.com.cn/dkumain/files/V2021-22_DKU_UG_Bulletin.pdf">official DKU bulletin source</a>. One paragraph or short policy block is one passage. The reproducible pipeline retains chapter, section, subsection, page, original text, and cleaned text; removes contents pages, empty fragments, repeated text, page numbers, malformed whitespace, and extraction artifacts; and does not aggressively remove stop words before embedding.</p>
+                <div class="lab8-stat-grid" aria-label="Corpus statistics">
+                    <span><strong>400</strong> PDF pages</span><span><strong>1,901</strong> raw passages</span>
+                    <span><strong>1,738</strong> cleaned passages</span><span><strong>55.1</strong> average words</span>
+                    <span><strong>165</strong> formal sections</span><span><strong>9</strong> semantic topics</span>
+                </div>
+                <details class="method-details">
+                    <summary>Semantic-analysis methodology</summary>
+                    <p><strong>Embedding model:</strong> Apple NaturalLanguage English sentence embedding, 512 dimensions, normalized before analysis. <strong>Projection:</strong> two-component principal component analysis (PCA), chosen as a deterministic, documented dimensionality-reduction method. Position should be interpreted through neighborhood and broad separation, not as two independently named semantic variables. <strong>Clustering:</strong> cosine K-means on the original 512-dimensional vectors, <em>k</em> = 9, random seed 401. Topic names were assigned after inspecting representative passages and characteristic TF-IDF terms. Nearest neighbors use cosine similarity in the original embedding space.</p>
+                </details>
+            </section>
+
+            <section class="lab8-section" aria-labelledby="overview-title">
+                <p class="section-label">2. Corpus Overview</p>
+                <h2 id="overview-title">Formal and Semantic Summaries</h2>
+                <p class="chart-description">The first chart compares passage counts for the bulletin&rsquo;s largest formal sections. The second summarizes the nine semantic topics; the accompanying TF-IDF terms explain how each topic was interpreted and labeled.</p>
+                <div class="overview-grid">
+                    <div class="mini-chart-card"><h3>Passages in the 12 Largest Sections</h3><div id="section-summary-chart"></div></div>
+                    <div class="mini-chart-card"><h3>Passages by Semantic Topic</h3><div id="topic-summary-chart"></div></div>
+                </div>
+                <div class="topic-term-table-wrap">
+                    <table class="topic-term-table">
+                        <thead><tr><th>Semantic topic</th><th>Passages</th><th>Characteristic TF-IDF terms</th></tr></thead>
+                        <tbody id="topic-term-body"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="lab8-section" aria-labelledby="map-title">
+                <p class="section-label">3. Semantic Embedding Map</p>
+                <h2 id="map-title">Explore Passage Meaning and Context</h2>
+                <p class="chart-description">Each point is one passage. Position comes from the two-dimensional semantic projection, color identifies the semantic topic, and point area represents passage length. Search and filters highlight matches; click a passage to retain its details and five closest semantic neighbors.</p>
+                <div class="lab8-controls" aria-label="Semantic-map controls">
+                    <label>Text search<input id="passage-search" type="search" placeholder="Try credit, graduation, registration&hellip;"></label>
+                    <label>Formal section<select id="section-filter"><option value="all">All sections</option></select></label>
+                    <label>Semantic topic<select id="topic-filter"><option value="all">All topics</option></select></label>
+                    <button id="clear-filters" type="button">Clear filters</button><button id="reset-zoom" type="button">Reset zoom</button>
+                </div>
+                <div id="map-status" class="network-status" role="status" aria-live="polite">Loading semantic passages&hellip;</div>
+                <div class="semantic-workspace">
+                    <div id="semantic-map" class="semantic-map"><div id="lab8-tooltip" class="chart-tooltip" role="status" aria-live="polite"></div></div>
+                    <aside id="passage-details" class="passage-details" aria-live="polite">
+                        <p class="section-label">Passage details</p><h3>Select a passage</h3>
+                        <p>Click or focus a point to inspect its document hierarchy, full passage, topic, and nearest semantic neighbors.</p>
+                    </aside>
+                </div>
+                <div id="topic-legend" class="topic-legend" aria-label="Semantic topic legend"></div>
+            </section>
+
+            <section class="lab8-section" aria-labelledby="matrix-title">
+                <p class="section-label">4. Topic &times; Bulletin Section Matrix</p>
+                <h2 id="matrix-title">Where Semantic Topics Appear</h2>
+                <p class="chart-description">Rows show the 30 largest formal sections, columns show semantic topics, and darker cells contain more passages. Hover for exact values. Click a cell to apply its section and topic to the semantic map; selecting a mapped passage highlights the corresponding matrix cell when its section is shown.</p>
+                <div id="matrix-status" class="network-status">Loading coordinated matrix&hellip;</div>
+                <div id="topic-section-matrix" class="matrix-scroll" tabindex="0" aria-label="Scrollable Topic by Bulletin Section matrix"><div id="matrix-tooltip" class="chart-tooltip" role="status" aria-live="polite"></div></div>
+            </section>
+
+            <section class="justification-card lab8-writing" aria-labelledby="findings-title">
+                <p class="section-label">5. Semantic Findings</p>
+                <h2 id="findings-title">Six Questions Answered with the System</h2>
+                <ol class="lab8-findings">
+                    <li><h3>What are the major semantic topics?</h3><p>The nine labeled clusters cover academic rules and credits; language and learning; China and globalization; data and materials; health and research; culture and media; civic questions; society and environment; and course requirements. The topic summary and map colors reveal their relative sizes and semantic neighborhoods.</p></li>
+                    <li><h3>Which topics appear across multiple formal sections?</h3><p>All nine topics cross formal boundaries. Academic Rules, Credits, and Enrollment is the largest cluster, while language-and-learning and interdisciplinary themes also span advising, requirements, majors, and course descriptions. Matrix columns with filled cells across many rows make this distribution visible.</p></li>
+                    <li><h3>Which formal sections are most semantically diverse?</h3><p>Political Science contains passages from eight topics. Media and Arts and Public Policy each contain seven. Their matrix rows contain many differently positioned filled cells, indicating broader semantic variety than sections dominated by one or two topics.</p></li>
+                    <li><h3>Which passages from different sections are semantically similar?</h3><p>Passage p0036 in <em>A Liberal Arts Education at Duke Kunshan University</em> and p0083 in <em>Undergraduate Signature Work</em> have cosine similarity 0.935. Both discuss degree standards and the relationship between DKU and Duke requirements, despite appearing in different formal sections.</p></li>
+                    <li><h3>Which passages appear unusual relative to their formal section?</h3><p>The map reveals isolated points and small minority-topic cells within otherwise concentrated matrix rows. Selecting such a point exposes whether its closest neighbors come from other sections, providing stronger evidence of semantic atypicality than section membership alone.</p></li>
+                    <li><h3>Do key concepts occupy one region or several topics?</h3><p>Search shows that <em>credit</em> occurs in 193 passages, <em>graduation</em> in 35, <em>registration</em> in nine, and <em>academic integrity</em> in four. Their highlighted points span multiple regions, although most credit and graduation passages concentrate in the academic-rules and language-and-learning clusters.</p></li>
+                </ol>
+            </section>
+
+            <section class="justification-card lab8-writing" aria-labelledby="design-title">
+                <p class="section-label">6. Design Description</p>
+                <h2 id="design-title">Connecting Formal and Semantic Structure</h2>
+                <p>The pipeline divides the official 2021&ndash;2022 bulletin into paragraph-sized policy or course-description passages while retaining chapter, section, subsection, page, original text, and cleaned text. Apple&rsquo;s 512-dimensional English sentence embedding represents passage meaning. After vector normalization, deterministic two-component PCA provides the displayed coordinates; cosine K-means with nine clusters and seed 401 operates on the original vectors. I inspected representative passages and cluster TF-IDF terms before assigning readable topic labels. PCA is used as a justified, reproducible projection, so proximity&mdash;not either individual axis&mdash;is the intended interpretation.</p>
+                <p>In the semantic map, position represents projected meaning, color represents topic, and circle area represents word count. Search and section/topic filters reduce visual competition, while zoom and pan support dense neighborhoods. Clicking a point opens its hierarchy and text and highlights five nearest neighbors calculated in the original embedding space. The matrix complements local neighborhoods with a structural overview: rows are formal sections, columns are topics, and cell intensity represents passage count. Clicking a cell filters the map, while selecting a passage highlights its matrix position. This coordination lets readers move directly between a distributional pattern and the passages responsible for it. Together, the map, matrix, details panel, summaries, and legends show both where text occurs in the bulletin and how its meaning crosses formal boundaries.</p>
+            </section>
         </section>
     </main>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="lab8.js?v=1"></script>
 </body>
 </html>

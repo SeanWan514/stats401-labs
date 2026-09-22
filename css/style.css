@@ -712,3 +712,75 @@ p {
     .day-summary { grid-template-columns: 1fr; }
     .playback-buttons button { flex: 1; }
 }
+
+/* Lab 8: bulletin text exploration */
+.lab8-page { width: min(1400px, calc(100% - 32px)); }
+.lab8-section { margin-top: 44px; }
+.lab8-stat-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; margin: 22px 0; }
+.lab8-stat-grid span { display: grid; gap: 3px; min-height: 82px; align-content: center; padding: 12px; color: var(--muted); text-align: center; background: #fff7fa; border: 1px solid var(--border); border-radius: 10px; }
+.lab8-stat-grid strong { color: var(--accent-dark); font-size: 1.35rem; }
+.method-details { padding: 14px 18px; background: #fffafd; border: 1px solid var(--border); border-radius: 10px; }
+.method-details summary { color: var(--accent-dark); cursor: pointer; font-weight: 900; }
+.method-details p { margin-bottom: 0; line-height: 1.65; }
+.overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 20px; }
+.mini-chart-card { overflow: hidden; padding: 18px; background: #fffafd; border: 1px solid var(--border); border-radius: 12px; }
+.mini-chart-card h3 { margin: 0 0 12px; color: var(--text); font-size: 1rem; }
+.mini-chart-card svg { display: block; width: 100%; height: auto; }
+.bar-label { fill: var(--text); font-size: 10px; font-weight: 750; }
+.bar-value { fill: var(--accent-dark); font-size: 10px; font-weight: 900; }
+.topic-term-table-wrap { overflow-x: auto; margin-top: 18px; border: 1px solid var(--border); border-radius: 10px; }
+.topic-term-table { width: 100%; min-width: 760px; border-collapse: collapse; background: #fffafd; }
+.topic-term-table th, .topic-term-table td { padding: 11px 13px; border-bottom: 1px solid var(--border); text-align: left; }
+.topic-term-table thead th { color: var(--accent-dark); background: #fff1f6; }
+.topic-term-table tbody th { color: var(--text); font-size: .9rem; }
+.table-topic-dot { display: inline-block; width: 11px; height: 11px; margin-right: 8px; border-radius: 50%; }
+.lab8-controls { display: grid; grid-template-columns: 1.4fr 1fr 1fr auto auto; gap: 10px; align-items: end; margin: 20px 0 14px; padding: 15px; background: #fff7fa; border: 1px solid var(--border); border-radius: 11px; }
+.lab8-controls label { display: grid; gap: 5px; color: var(--accent-dark); font-size: .84rem; font-weight: 900; }
+.lab8-controls input, .lab8-controls select, .lab8-controls button { min-height: 42px; padding: 8px 10px; border: 1px solid #dc9eb8; border-radius: 7px; font: inherit; }
+.lab8-controls input, .lab8-controls select { min-width: 0; color: var(--text); background: white; }
+.lab8-controls button { color: white; background: var(--accent-dark); cursor: pointer; font-weight: 850; }
+.lab8-controls button:hover, .lab8-controls button:focus-visible { background: var(--accent); outline: 3px solid rgba(195,47,108,.16); }
+.semantic-workspace { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(300px, .75fr); gap: 16px; align-items: stretch; }
+.semantic-map { position: relative; overflow: hidden; min-height: 560px; background: radial-gradient(circle at 50% 45%, #fff 0, #fff8fb 72%); border: 1px solid var(--border); border-radius: 12px; }
+.semantic-map svg { display: block; width: 100%; height: auto; touch-action: none; }
+.map-background { fill: transparent; cursor: move; }
+.semantic-point { stroke: #fff; stroke-width: 1.1px; opacity: .78; cursor: pointer; transition: opacity 120ms ease, stroke-width 120ms ease; }
+.semantic-point.filtered-out { opacity: .035; pointer-events: none; }
+.semantic-point:hover, .semantic-point:focus { stroke: #371021; stroke-width: 2.8px; opacity: 1; outline: none; }
+.semantic-point.selected { stroke: #111; stroke-width: 4px; opacity: 1; }
+.semantic-point.neighbor { stroke: #f0b429; stroke-width: 3px; opacity: 1; }
+.passage-details { max-height: 720px; overflow-y: auto; padding: 20px; background: #fff7fa; border: 1px solid var(--border); border-radius: 12px; }
+.passage-details h3 { margin: 5px 0 10px; color: var(--text); }
+.passage-details dl { display: grid; gap: 7px; margin: 0 0 15px; }
+.passage-details dl div { display: grid; grid-template-columns: 85px 1fr; gap: 8px; }
+.passage-details dt { color: var(--accent-dark); font-weight: 900; }
+.passage-details dd { margin: 0; color: var(--muted); }
+.passage-text { padding: 13px; color: var(--text); line-height: 1.58; background: white; border-left: 4px solid var(--accent); border-radius: 6px; }
+.passage-details h4 { margin: 20px 0 9px; color: var(--accent-dark); }
+.neighbor-list { display: grid; gap: 7px; padding-left: 20px; }
+.neighbor-list button { width: 100%; padding: 9px; text-align: left; background: white; border: 1px solid var(--border); border-radius: 7px; cursor: pointer; }
+.neighbor-list button strong, .neighbor-list button span { display: block; }
+.neighbor-list button span { margin-top: 3px; color: var(--muted); font-size: .8rem; line-height: 1.35; }
+.topic-legend { display: flex; flex-wrap: wrap; gap: 8px 14px; margin-top: 13px; padding: 14px; background: #fff7fa; border: 1px solid var(--border); border-radius: 10px; }
+.topic-legend > span { display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: .84rem; }
+.topic-legend i { width: 12px; height: 12px; border-radius: 50%; }
+.matrix-scroll { position: relative; max-height: 800px; overflow: auto; background: #fffafd; border: 1px solid var(--border); border-radius: 12px; }
+.matrix-scroll svg { display: block; }
+.matrix-cell { stroke: #f1d5e0; cursor: pointer; outline: none; }
+.matrix-cell:hover, .matrix-cell:focus, .matrix-cell.selected { stroke: #111; stroke-width: 3px; }
+.matrix-row-label, .matrix-column-label { fill: var(--text); font-size: 10px; font-weight: 750; }
+.lab8-writing p, .lab8-writing li { line-height: 1.68; }
+.lab8-findings { display: grid; gap: 21px; margin: 16px 0 0; padding-left: 24px; color: var(--muted); }
+.lab8-findings h3 { margin: 0 0 6px; color: var(--text); font-size: 1.02rem; }
+.lab8-findings p { margin: 0; }
+
+@media (max-width: 1050px) {
+    .lab8-stat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .overview-grid, .semantic-workspace { grid-template-columns: 1fr; }
+    .lab8-controls { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 640px) {
+    .lab8-stat-grid, .lab8-controls { grid-template-columns: 1fr; }
+    .semantic-map { min-height: 360px; }
+}

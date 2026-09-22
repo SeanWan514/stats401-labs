@@ -1,0 +1,17 @@
+{
+  "title": "Bulletin of Duke Kunshan University Undergraduate Instruction",
+  "version": "2021–2022",
+  "source_url": "https://dku-web-admissions.s3.cn-north-1.amazonaws.com.cn/dkumain/files/V2021-22_DKU_UG_Bulletin.pdf",
+  "access_date": "September 22, 2026",
+  "pdf_pages": 400,
+  "raw_passages": 1901,
+  "clean_passages": 1738,
+  "average_words": 55.1,
+  "formal_sections": 165,
+  "chapters": 12,
+  "semantic_topics": 9,
+  "embedding_model": "Apple NaturalLanguage English sentence embedding",
+  "embedding_dimensions": 512,
+  "projection": "Two-component principal component analysis (PCA) of normalized semantic embeddings",
+  "clustering": "Cosine K-means, k=9, random seed 401"
+}
