@@ -107,6 +107,7 @@ p {
 }
 
 .project-card {
+    scroll-margin-top: 24px;
     color: #ffffff;
     background: linear-gradient(135deg, #321a26 0%, #5e1d3d 58%, #8f1d4d 100%);
     border-color: #8f1d4d;
