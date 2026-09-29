@@ -842,3 +842,45 @@ p {
     .lab8-stat-grid, .lab8-controls { grid-template-columns: 1fr; }
     .semantic-map { min-height: 360px; }
 }
+
+/* Lab 9: geospatial GDP comparison */
+.lab9-page { width: min(1360px, calc(100% - 32px)); }
+.lab9-section { margin-top: 46px; }
+.lab9-section h2 { margin-bottom: 10px; }
+.lab9-stat-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 22px 0 15px; }
+.lab9-stat-grid span { display: grid; gap: 4px; min-height: 82px; align-content: center; padding: 12px; color: var(--muted); text-align: center; background: #fff7fa; border: 1px solid var(--border); border-radius: 10px; }
+.lab9-stat-grid strong { color: var(--accent-dark); font-size: 1.35rem; }
+.source-note { color: var(--muted); font-size: .92rem; }
+.map-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin: 18px 0 12px; padding: 14px; background: #fff7fa; border: 1px solid var(--border); border-radius: 11px; }
+.map-toolbar button { flex: 0 0 auto; min-height: 42px; padding: 9px 16px; color: white; background: var(--accent-dark); border: 0; border-radius: 7px; cursor: pointer; font: inherit; font-weight: 850; }
+.map-toolbar button:hover, .map-toolbar button:focus-visible { background: var(--accent); outline: 3px solid rgba(195,47,108,.18); }
+.map-legend { flex: 1; min-width: 0; }
+.map-legend strong, .cartogram-legend strong { display: block; margin-bottom: 5px; color: var(--accent-dark); font-size: .88rem; }
+.map-legend svg { display: block; width: min(100%, 560px); height: auto; overflow: visible; }
+.cartogram-legend { margin: 18px 0 12px; padding: 14px 18px 2px; background: #fff7fa; border: 1px solid var(--border); border-radius: 11px; }
+.cartogram-legend svg { display: block; width: min(100%, 620px); height: auto; }
+.geo-chart { position: relative; overflow: hidden; width: 100%; background: radial-gradient(circle at 50% 45%, #fff 0, #fff8fb 78%); border: 1px solid var(--border); border-radius: 13px; }
+.geo-chart svg { display: block; width: 100%; height: auto; touch-action: none; }
+#lab9-tooltip { position: fixed; }
+.country-shape { stroke: #fff; stroke-width: .7px; vector-effect: non-scaling-stroke; cursor: pointer; transition: opacity 130ms ease, stroke 130ms ease, stroke-width 130ms ease; outline: none; }
+.country-shape.missing-gdp { stroke: #c9bec3; stroke-width: .45px; }
+.country-shape:hover, .country-shape:focus, .country-shape.linked-active { stroke: #111; stroke-width: 3px; opacity: 1; }
+.country-shape.linked-muted { opacity: .3; }
+.cartogram-chart { min-height: 420px; }
+.cartogram-country { cursor: pointer; outline: none; transition: opacity 130ms ease; }
+.cartogram-country circle { stroke: #fff; stroke-width: 2.2px; transition: stroke 130ms ease, stroke-width 130ms ease; }
+.cartogram-country:hover circle, .cartogram-country:focus circle, .cartogram-country.linked-active circle { stroke: #111; stroke-width: 5px; }
+.cartogram-country.linked-muted { opacity: .2; }
+.cartogram-label { fill: #fff; font-size: 10px; font-weight: 950; pointer-events: none; paint-order: stroke; stroke: rgba(55,16,33,.55); stroke-width: 2px; }
+.country-readout { margin-top: 25px; padding: 13px 17px; color: #fff; background: rgba(77,18,43,.94); border-radius: 9px; box-shadow: 0 8px 24px rgba(66,14,36,.18); }
+.lab9-writing p { line-height: 1.72; }
+
+@media (max-width: 760px) {
+    .lab9-stat-grid { grid-template-columns: 1fr 1fr; }
+    .map-toolbar { align-items: stretch; flex-direction: column; }
+    .map-toolbar button { align-self: flex-start; }
+}
+
+@media (max-width: 500px) {
+    .lab9-stat-grid { grid-template-columns: 1fr; }
+}
