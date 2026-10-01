@@ -866,13 +866,13 @@ p {
 .country-shape.missing-gdp { stroke: #c9bec3; stroke-width: .45px; }
 .country-shape:hover, .country-shape:focus, .country-shape.linked-active { stroke: #111; stroke-width: 3px; opacity: 1; }
 .country-shape.linked-muted { opacity: .3; }
-.cartogram-chart { min-height: 420px; }
+.cartogram-chart { min-height: 460px; background: radial-gradient(circle at 50% 45%, #f9fbf7 0, #eef4f0 82%); }
 .cartogram-country { cursor: pointer; outline: none; transition: opacity 130ms ease; }
-.cartogram-country circle { stroke: #fff; stroke-width: 2.2px; transition: stroke 130ms ease, stroke-width 130ms ease; }
-.cartogram-country:hover circle, .cartogram-country:focus circle, .cartogram-country.linked-active circle { stroke: #111; stroke-width: 5px; }
+.cartogram-country path { stroke: #fff; stroke-width: 1.05px; vector-effect: non-scaling-stroke; transition: stroke 130ms ease, stroke-width 130ms ease; }
+.cartogram-country.missing-gdp path { stroke: #b9b8b2; stroke-width: .55px; }
+.cartogram-country:hover path, .cartogram-country:focus path, .cartogram-country.linked-active path { stroke: #111; stroke-width: 3.5px; }
 .cartogram-country.linked-muted { opacity: .2; }
 .cartogram-label { fill: #fff; font-size: 10px; font-weight: 950; pointer-events: none; paint-order: stroke; stroke: rgba(55,16,33,.55); stroke-width: 2px; }
-.country-readout { margin-top: 25px; padding: 13px 17px; color: #fff; background: rgba(77,18,43,.94); border-radius: 9px; box-shadow: 0 8px 24px rgba(66,14,36,.18); }
 .lab9-writing p { line-height: 1.72; }
 
 @media (max-width: 760px) {

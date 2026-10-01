@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lab 9: Geospatial Visualization with D3</title>
-    <link rel="stylesheet" href="../css/style.css?v=19">
+    <link rel="stylesheet" href="../css/style.css?v=20">
 </head>
 <body>
     <main class="page-container lab9-page">
@@ -21,17 +21,17 @@
         <section class="content-card lab-card">
             <p class="course-label">STATS 401 &middot; Lab 9</p>
             <h1>Geospatial Visualization with D3</h1>
-            <p class="chart-description">Two coordinated maps compare the geographic distribution and economic magnitude of the world&rsquo;s 50 largest economies. Hover, focus, or select a country in either view to identify it in both.</p>
+            <p class="chart-description">For Lab 9, I have created two coordinated maps (choropleth and cartogram) to compare the geographic distribution and economic magnitude of the world&rsquo;s 50 largest economies. Hover over, focus, or select a country in either view to identify it in both visualizations. Enjoy!</p>
 
             <section class="lab9-section" aria-labelledby="dataset-title">
                 <p class="section-label">1. Dataset Description</p>
                 <h2 id="dataset-title">2025 Nominal GDP and World Geography</h2>
-                <p>The provided dataset contains the 50 largest economies by projected 2025 nominal GDP, measured in billions of current U.S. dollars and based on the IMF <em>World Economic Outlook</em>, October 2025. Each GDP record is joined to Natural Earth country geometry by its ISO-3 geographic identifier. Countries outside the supplied top-50 dataset are shown as <strong>missing data</strong>, never as zero GDP.</p>
+                <p>Notice that the provided dataset contains the 50 largest economies by their projected 2025 nominal GDP, measured in billions of current U.S. dollars ($) and based on the IMF <em>World Economic Outlook</em>, October 2025. I successfully loaded both the GDP and Natural Earth geographic datasets, then joined every GDP record to its country geometry by using the ISO-3 geographic identifier. Countries outside the supplied top-50 dataset are shown as <strong>missing data</strong>, NOT as zero GDP.</p>
                 <div class="lab9-stat-grid" aria-label="Dataset statistics">
-                    <span><strong>50</strong> GDP records</span>
-                    <span><strong>50 / 50</strong> ISO-3 matches</span>
-                    <span><strong>$117.2T</strong> world GDP context</span>
-                    <span><strong>2025</strong> nominal GDP</span>
+                    <span><strong>50</strong> GDP Records</span>
+                    <span><strong>50 / 50</strong> ISO-3 Matches</span>
+                    <span><strong>$117.2T</strong> World GDP Context</span>
+                    <span><strong>2025</strong> Nominal GDP</span>
                 </div>
                 <p class="source-note"><strong>Sources:</strong> GDP values: IMF World Economic Outlook, October 2025 series. Geographic boundaries: <a href="https://www.naturalearthdata.com/">Natural Earth</a> 1:50m countries, public domain.</p>
             </section>
@@ -39,7 +39,7 @@
             <section class="lab9-section" aria-labelledby="choropleth-title">
                 <p class="section-label">2. Choropleth Map</p>
                 <h2 id="choropleth-title">2025 GDP Encoded by Color</h2>
-                <p class="chart-description">Geographic position and country boundaries remain intact. Darker coral-plum indicates greater GDP on a logarithmic color scale, which preserves variation among smaller economies while accommodating the highly skewed values of the United States and China. Scroll or pinch to zoom, drag to pan, and use Reset Zoom to return to the world view.</p>
+                <p class="chart-description">For the choropleth visualization, the geographic position and country boundaries remain intact. Darker purple indicates greater GDP on a logarithmic color scale, which preserves variation among smaller economies while accommodating the highly skewed values of the United States and China. Feel free to scroll or pinch to zoom, drag to pan, and use Reset Zoom to return to the world view. Enjoy!</p>
                 <div class="map-toolbar">
                     <div id="choropleth-legend" class="map-legend" aria-label="Quantitative GDP color legend"></div>
                     <button id="reset-map-zoom" type="button">Reset Zoom</button>
@@ -51,26 +51,23 @@
             </section>
 
             <section class="lab9-section" aria-labelledby="cartogram-title">
-                <p class="section-label">3. Dorling Cartogram</p>
-                <h2 id="cartogram-title">Country Area Encodes 2025 GDP</h2>
-                <p class="chart-description">Each top-50 country is represented by a non-overlapping circle positioned near its geographic centroid. Circle <strong>area is directly proportional to GDP</strong>; approximate location aids recognition, but boundaries, distances, and adjacency are intentionally distorted. This is a Dorling cartogram, not a bubble overlay on the choropleth.</p>
+                <p class="section-label">3. Cartogram Map</p>
+                <h2 id="cartogram-title">2025 GDP Encoded by Country Area</h2>
+                <p class="chart-description">For the cartogram visualization, every country geometry remains present, while the 50 matched economies are resized so that their displayed country area reflects 2025 GDP. Larger economies expand and smaller economies contract; missing-data countries remain visible in neutral gray for geographic context. The non-contiguous layout preserves recognizable country shapes and approximate locations, while intentionally distorting size, distance, and adjacency to emphasize economic magnitude. Hover over, focus, or select any country to inspect it in both visualizations. Enjoy!</p>
                 <div id="cartogram-legend" class="cartogram-legend" aria-label="GDP area legend"></div>
-                <div id="cartogram" class="geo-chart cartogram-chart" aria-label="Dorling cartogram of 2025 GDP"></div>
+                <div id="cartogram-status" class="network-status" role="status" aria-live="polite">Loading resized country geometries&hellip;</div>
+                <div id="cartogram" class="geo-chart cartogram-chart" aria-label="Non-contiguous country-shape cartogram of 2025 GDP"></div>
             </section>
 
             <section class="justification-card lab9-writing" aria-labelledby="comparison-title">
                 <p class="section-label">4. Design and Comparison</p>
                 <h2 id="comparison-title">Geography, Magnitude, and Task Trade-offs</h2>
-                <p><strong>1.</strong> The United States and China are most prominent in both views: they receive the darkest choropleth colors and the largest cartogram areas. <strong>2.</strong> Compact but wealthy economies such as Germany, Japan, the United Kingdom, and South Korea expand substantially in the cartogram, while geographically large Canada, Russia, Australia, and Kazakhstan contract relative to their land area. <strong>3.</strong> The choropleth preserves recognizable borders, locations, adjacency, direction, and regional context. <strong>4.</strong> The cartogram deliberately sacrifices boundary shape, distance, and exact neighborhood relationships so that area can communicate economic magnitude.</p>
-                <p><strong>5.</strong> The choropleth best supports locating countries, recognizing regional patterns, and relating GDP to geography; its logarithmic color scale prevents the largest two values from suppressing differences among the other economies. <strong>6.</strong> The Dorling cartogram best supports comparing magnitude, rank, and economic concentration because circle area is directly proportional to GDP. Linked highlighting restores identity when distortion makes a country difficult to recognize. <strong>7.</strong> Changing the principal encoding from color to area makes the extreme concentration of global output much more immediate: the United States and China visually dominate, while lower-ranked economies become small. Color preserves geographic form but encourages broad intensity judgments; area makes quantitative disparity unmistakable while weakening the map&rsquo;s geographic fidelity. Together, the views expose a useful trade-off rather than declaring either design universally superior.</p>
+                <p><strong>1.</strong> I think the United States and China are most prominent in both views: they receive the darkest choropleth colors (dark purple) and the largest cartogram areas. <strong>2.</strong> Geographically compact but wealthy economies such as Germany, Japan, the United Kingdom, and South Korea expand substantially in the cartogram, while geographically large Canada, Russia, Australia, and Kazakhstan shrink and become smaller relative to their land area. <strong>3.</strong> The choropleth visualization preserves recognizable borders, locations, adjacency, direction, and regional context. <strong>4.</strong> The cartogram deliberately sacrifices and distorts geographical boundary shape, distance, borders, and exact neighborhood relationships, so that area can communicate economic magnitude.</p>
+                <p><strong>5.</strong> The choropleth best supports locating countries, recognizing regional patterns, and relating GDP to geography; its logarithmic color scale prevents the largest two values from suppressing differences among the other economies. <strong>6.</strong> The cartogram best supports comparing magnitude, rank, and economic concentration because the displayed country area is directly proportional to GDP. Linked highlighting restores identity when distortion makes a country difficult to recognize. <strong>7.</strong> Changing the principal encoding from color to area makes the extreme concentration of global output much more immediate: the United States and China visually dominate, while lower-ranked economies become small. Color preserves geographic form but encourages broad intensity judgments; area makes quantitative disparity unmistakable while weakening the map&rsquo;s geographic fidelity. Together, the views expose a useful trade-off rather than declaring either design universally superior.</p>
             </section>
-
-            <div id="country-readout" class="country-readout" aria-live="polite">
-                <strong>Linked inspection:</strong> Hover, focus, or click a country in either view.
-            </div>
         </section>
     </main>
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-    <script src="lab9.js?v=1"></script>
+    <script src="lab9.js?v=2"></script>
 </body>
 </html>
