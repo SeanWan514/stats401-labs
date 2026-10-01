@@ -19,7 +19,7 @@ function tooltipPosition(event, mark) {
 }
 
 function showTooltip(event, mark, datum) {
-    const info = datum.gdp;
+    const info = datum.gdp || datum.properties?.gdp;
     const name = info ? info.country : datum.properties.name;
     const content = info
         ? `<strong>${name}</strong><span>2025 GDP: ${formatGDP(info.gdp_2025_billion_usd)} billion</span><span>Global rank: ${info.rank}</span><span>ISO-3: ${info.iso3}</span>`
@@ -80,22 +80,6 @@ function drawColorLegend(color, domain) {
     svg.append("text").attr("x", 520).attr("y", 20).attr("font-size", 11).text("Missing");
 }
 
-function drawAreaLegend(color, maxGDP) {
-    const values = [500, 5000, 30000];
-    const holder = d3.select("#cartogram-legend");
-    holder.append("strong").text("Displayed country area = 2025 GDP (billions of current US$)");
-    const svg = holder.append("svg").attr("viewBox", "0 0 700 125").attr("role", "img").attr("aria-label", "Cartogram country-area examples for 500, 5,000, and 30,000 billion dollars");
-    const x = [60, 235, 500];
-    values.forEach((value, i) => {
-        const side = Math.sqrt(value / maxGDP) * 92;
-        svg.append("rect").attr("x", x[i] - side / 2).attr("y", 94 - side).attr("width", side).attr("height", side)
-            .attr("fill", color(value)).attr("stroke", "#fff").attr("stroke-width", 2);
-        svg.append("text").attr("x", x[i]).attr("y", 118).attr("text-anchor", "middle").attr("font-size", 12).attr("font-weight", 800).text(`$${d3.format(",")(value)}B`);
-    });
-    svg.append("rect").attr("x", 620).attr("y", 76).attr("width", 18).attr("height", 18).attr("fill", "#d8d8d4").attr("stroke", "#aaa9a3");
-    svg.append("text").attr("x", 646).attr("y", 90).attr("font-size", 11).text("Missing");
-}
-
 Promise.all([
     d3.json("../data/lab9_world.geojson"),
     d3.csv("../data/lab9_gdp_2025_top50.csv", d => ({
@@ -103,8 +87,9 @@ Promise.all([
         country: d.country,
         gdp_2025_billion_usd: +d.gdp_2025_billion_usd,
         rank: +d.rank
-    }))
-]).then(([world, gdp]) => {
+    })),
+    d3.json("../data/lab9_cartogram.geojson")
+]).then(([world, gdp, cartogramWorld]) => {
     const gdpByIso = new Map(gdp.map(d => [d.iso3, d]));
     world.features.forEach(feature => { feature.gdp = gdpByIso.get(featureIso(feature)) || null; });
     const matched = new Set(world.features.filter(d => d.gdp).map(featureIso));
@@ -136,56 +121,23 @@ Promise.all([
     mapSvg.call(zoom).on("dblclick.zoom", null).on("click", () => { selectedIso = null; setHighlight(null); });
     d3.select("#reset-map-zoom").on("click", () => mapSvg.transition().duration(500).call(zoom.transform, d3.zoomIdentity));
 
-    drawAreaLegend(color, domain[1]);
-    const maximumTargetArea = 30000;
-    const cartogramNodes = world.features.map(feature => {
-        const centroid = path.centroid(feature);
-        const originalArea = Math.max(path.area(feature), .01);
-        const targetArea = feature.gdp
-            ? (feature.gdp.gdp_2025_billion_usd / domain[1]) * maximumTargetArea
-            : originalArea * .08;
-        const scale = Math.sqrt(targetArea / originalArea);
-        const collisionRadius = feature.gdp
-            ? Math.sqrt(targetArea / Math.PI) * 1.08
-            : Math.max(1.5, Math.sqrt(targetArea / Math.PI) * .65);
-        return {feature, cx: centroid[0], cy: centroid[1], x: centroid[0], y: centroid[1], scale, targetArea, collisionRadius};
-    });
-    const matchedCartogramNodes = cartogramNodes.filter(d => d.feature.gdp);
-    const simulation = d3.forceSimulation(matchedCartogramNodes)
-        .force("x", d3.forceX(d => d.cx).strength(.38))
-        .force("y", d3.forceY(d => d.cy).strength(.38))
-        .force("collide", d3.forceCollide(d => d.collisionRadius + 2).iterations(5))
-        .stop();
-    for (let i = 0; i < 600; i += 1) simulation.tick();
-    cartogramNodes.forEach(node => {
-        node.x = Math.max(node.collisionRadius + 8, Math.min(WIDTH - node.collisionRadius - 8, node.x));
-        node.y = Math.max(node.collisionRadius + 8, Math.min(CARTOGRAM_HEIGHT - node.collisionRadius - 8, node.y + 25));
-        node.feature.cx = node.cx;
-        node.feature.cy = node.cy;
-        node.feature.x = node.x;
-        node.feature.y = node.y;
-        node.feature.scale = node.scale;
-        node.feature.targetArea = node.targetArea;
-    });
-
+    const cartogramPath = d3.geoPath().projection(null);
     const cartSvg = d3.select("#cartogram").append("svg")
         .attr("viewBox", `0 0 ${WIDTH} ${CARTOGRAM_HEIGHT}`)
         .attr("role", "img")
-        .attr("aria-label", "Non-contiguous country-shape cartogram where displayed area represents 2025 GDP");
-    const cartogramOrder = [...world.features].sort((a, b) => Number(Boolean(a.gdp)) - Number(Boolean(b.gdp)));
+        .attr("aria-label", "Contiguous country-shape cartogram where country area represents 2025 GDP and shared borders remain connected");
+    const cartogramOrder = [...cartogramWorld.features].sort((a, b) => Number(Boolean(a.properties.gdp)) - Number(Boolean(b.properties.gdp)));
     cartogramMarks = cartSvg.selectAll("g.cartogram-country").data(cartogramOrder).join("g")
-        .attr("class", d => `cartogram-country${d.gdp ? " has-gdp" : " missing-gdp"}`)
+        .attr("class", d => `cartogram-country${d.properties.gdp ? " has-gdp" : " missing-gdp"}`)
         .attr("tabindex", 0)
         .attr("role", "button")
-        .attr("aria-label", d => d.gdp ? `${d.gdp.country}, displayed country area represents ${formatGDP(d.gdp.gdp_2025_billion_usd)} billion dollars, rank ${d.gdp.rank}` : `${d.properties.name}, GDP missing from the provided top-50 dataset`);
+        .attr("aria-label", d => d.properties.gdp ? `${d.properties.gdp.country}, deformed country area represents ${formatGDP(d.properties.gdp.gdp_2025_billion_usd)} billion dollars, rank ${d.properties.gdp.rank}` : `${d.properties.name}, GDP missing from the provided top-50 dataset`);
     cartogramMarks.append("path")
-        .attr("d", path)
-        .attr("transform", d => `translate(${d.x},${d.y}) scale(${d.scale}) translate(${-d.cx},${-d.cy})`)
-        .attr("fill", d => d.gdp ? color(d.gdp.gdp_2025_billion_usd) : "#d8d8d4");
-    cartogramMarks.filter(d => d.gdp && d.gdp.rank <= 12).append("text")
+        .attr("d", cartogramPath)
+        .attr("fill", d => d.properties.gdp ? color(d.properties.gdp.gdp_2025_billion_usd) : "#d8d8d4");
+    cartogramMarks.filter(d => d.properties.gdp && d.properties.gdp.rank <= 12).append("text")
         .attr("class", "cartogram-label")
-        .attr("x", d => d.x)
-        .attr("y", d => d.y)
+        .attr("transform", d => `translate(${cartogramPath.centroid(d)})`)
         .attr("text-anchor", "middle")
         .attr("dy", ".32em")
         .text(d => featureIso(d));
@@ -195,7 +147,7 @@ Promise.all([
     interactionHandlers(cartogramMarks);
     const missingCount = world.features.length - gdp.length;
     d3.select("#choropleth-status").text(`Choropleth: all ${gdp.length} GDP records joined to GeoJSON by ISO-3; ${missingCount} other geographic features are displayed as missing data.`);
-    d3.select("#cartogram-status").text(`Cartogram: all ${gdp.length} GDP records joined to GeoJSON by ISO-3 and resized by GDP area; ${missingCount} other geographic features remain visible as missing data.`);
+    d3.select("#cartogram-status").text(`Cartogram: all ${gdp.length} GDP records joined to GeoJSON by ISO-3 and encoded through contiguous country area; ${missingCount} other geographic features retain baseline area targets as missing data.`);
 }).catch(error => {
     console.error(error);
     d3.select("#choropleth-status").text(`The maps could not load: ${error.message}`);
