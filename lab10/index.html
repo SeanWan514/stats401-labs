@@ -3,16 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lab 10</title>
-    <link rel="stylesheet" href="../css/style.css?v=2">
+    <title>Lab 10: Novel Interaction with Visualizations</title>
+    <link rel="stylesheet" href="../css/style.css?v=21">
 </head>
 <body>
-    <main class="page-container">
-        <section class="content-card placeholder-card">
-            <h1>Lab 10</h1>
-            <p>Oops! Seems like Lab 10 has not yet been added. Please check back later.</p>
-            <a class="back-link" href="../index.html">Back to home</a>
+    <main class="page-container lab10-page">
+        <a class="back-link" href="../index.html">&larr; Back to home</a>
+        <nav class="lab-nav compact-nav" aria-label="Lab navigation">
+            <a href="../lab1/index.html">Lab 1</a><a href="../lab2/index.html">Lab 2</a>
+            <a href="../lab3/index.html">Lab 3</a><a href="../lab4/index.html">Lab 4</a>
+            <a href="../lab5/index.html">Lab 5</a><a href="../lab6/index.html">Lab 6</a>
+            <a href="../lab7/index.html">Lab 7</a><a href="../lab8/index.html">Lab 8</a>
+            <a href="../lab9/index.html">Lab 9</a>
+            <a class="active" href="../lab10/index.html" aria-current="page">Lab 10</a>
+        </nav>
+
+        <section class="content-card lab-card">
+            <p class="course-label">STATS 401 &middot; Lab 10</p>
+            <h1>Novel Interaction with Visualizations</h1>
+            <p class="chart-description">For this lab, I extended my Lab 7 temporal commercial network with hands-free voice interaction. After explicitly starting the microphone, you can navigate the 60-day visualization, control playback, and highlight a company by speaking a command. Visible feedback reports what the system heard and which visualization action it performed. Every original mouse, keyboard, button, slider, dragging, and tooltip interaction remains available as a conventional fallback.</p>
+
+            <section class="lab10-section" aria-labelledby="extension-title">
+                <p class="section-label">1. Previous Visualization and Interaction Task</p>
+                <h2 id="extension-title">Extending the Lab 7 Temporal Network</h2>
+                <p>The reused visualization contains 12 fabricated companies and 367 commercial transaction records covering January 1 through March 1, 2026. Stable company positions preserve the mental map while daily links enter and disappear. Voice commands now support the specific task of temporal navigation and hands-free company highlighting without changing the underlying data, encodings, or conventional interactions.</p>
+                <div class="lab10-summary" aria-label="Lab 10 implementation summary">
+                    <span><strong>Reused View</strong> Lab 7 Temporal Network</span>
+                    <span><strong>Novel Modality</strong> Voice Interaction</span>
+                    <span><strong>Primary Task</strong> Temporal Navigation</span>
+                    <span><strong>Fallback</strong> Buttons and 60-Day Slider</span>
+                </div>
+            </section>
+
+            <section class="lab10-section" aria-labelledby="voice-title">
+                <p class="section-label">2. Voice Interaction</p>
+                <h2 id="voice-title">Speak a Visualization Command</h2>
+                <p class="chart-description">Select <strong>Start Voice Control</strong>, approve microphone access if your browser asks, and speak one command. The microphone is never activated automatically and stops after one recognition attempt. Watch the feedback cards for the recognition state, transcript, and resulting action. If speech recognition is unsupported or unsuccessful, use the complete conventional controls in Section 3.</p>
+
+                <div class="voice-panel">
+                    <div class="voice-panel-header">
+                        <div class="voice-buttons" aria-label="Voice recognition controls">
+                            <button id="start-voice" type="button" disabled>&#127908; Start Voice Control</button>
+                            <button id="stop-voice" type="button" disabled>&#9632; Cancel Listening</button>
+                            <button id="clear-voice-highlight" type="button">Clear Company Highlight</button>
+                        </div>
+                        <p id="voice-support" class="voice-support">Checking browser speech-recognition support&hellip;</p>
+                    </div>
+
+                    <div class="voice-feedback" aria-live="polite" aria-atomic="true">
+                        <div><span>Recognition</span><strong id="voice-state">Inactive</strong></div>
+                        <div><span>Heard</span><strong id="voice-transcript">No command yet</strong></div>
+                        <div><span>Action</span><strong id="voice-action">Waiting for explicit activation</strong></div>
+                    </div>
+
+                    <div class="voice-command-guide" aria-labelledby="command-guide-title">
+                        <h3 id="command-guide-title">Supported Commands</h3>
+                        <ul>
+                            <li><code>Play</code> or <code>Pause</code></li>
+                            <li><code>Next day</code> or <code>Previous day</code></li>
+                            <li><code>Go to day 30</code> (Days 1&ndash;60)</li>
+                            <li><code>Reset</code></li>
+                            <li><code>Highlight Ion Systems</code></li>
+                            <li><code>Clear highlight</code></li>
+                        </ul>
+                    </div>
+
+                    <p class="voice-privacy"><strong>Privacy and fallback:</strong> this page does not start the microphone on load and does not intentionally store audio or transcripts. Speech availability, permission handling, and processing depend on the browser. The visualization remains fully usable without microphone permission.</p>
+                </div>
+            </section>
+
+            <section class="lab10-section" aria-labelledby="network-title">
+                <p class="section-label">3. Reused Visualization and Conventional Controls</p>
+                <h2 id="network-title">Voice-Controlled Temporal Commercial Network</h2>
+                <p class="chart-description">Use voice or the controls below to inspect any day. Play animates the network, Pause stops on the current frame, Reset returns to Day 1, and the slider selects a day manually. Hover over or focus a company or relationship for exact details, and drag companies when you want to separate overlapping marks.</p>
+
+                <div class="temporal-controls" aria-label="Animation controls">
+                    <div class="playback-buttons">
+                        <button id="play-button" type="button">&#9654; Play</button>
+                        <button id="pause-button" type="button">&#10074;&#10074; Pause</button>
+                        <button id="reset-button" type="button">&#8634; Reset</button>
+                    </div>
+                    <label class="time-slider-control" for="time-slider">
+                        <span>Choose a day</span>
+                        <input id="time-slider" type="range" min="1" max="60" value="1" step="1">
+                    </label>
+                    <div class="current-time" aria-live="polite">
+                        <strong id="current-day">Day 1 of 60</strong>
+                        <span id="current-date">January 1, 2026</span>
+                    </div>
+                </div>
+
+                <div id="network-status" class="network-status" role="status" aria-live="polite">Loading the temporal network&hellip;</div>
+                <div id="temporal-network" class="temporal-network-chart">
+                    <div id="temporal-tooltip" class="chart-tooltip temporal-tooltip" role="status" aria-live="polite"></div>
+                </div>
+
+                <div id="day-summary" class="day-summary" aria-label="Current day summary">
+                    <span><strong id="active-companies">&mdash;</strong> Active Companies</span>
+                    <span><strong id="active-links">&mdash;</strong> Active Links</span>
+                    <span><strong id="daily-value">&mdash;</strong> Transaction Value</span>
+                    <span><strong id="daily-count">&mdash;</strong> Transactions Represented</span>
+                </div>
+            </section>
+
+            <section class="lab10-section" aria-labelledby="fallback-title">
+                <p class="section-label">4. Encodings and Fallback Controls</p>
+                <h2 id="fallback-title">The Visualization Remains Usable without Voice</h2>
+                <div id="temporal-legend" class="network-legend temporal-legend"></div>
+                <div class="fallback-grid">
+                    <div><strong>Temporal Navigation</strong><span>Play, Pause, Reset, and the 60-day slider duplicate every voice navigation action.</span></div>
+                    <div><strong>Direct Inspection</strong><span>Mouse hover and keyboard focus reveal company and relationship tooltips.</span></div>
+                    <div><strong>Company Inspection</strong><span>Hover or focus highlights current neighbors; voice or the clear-highlight button controls persistent company emphasis.</span></div>
+                    <div><strong>Layout Adjustment</strong><span>Dragging remains available for manually separating company marks and incident links.</span></div>
+                </div>
+            </section>
+
+            <section class="justification-card lab10-writing" aria-labelledby="reflection-title">
+                <p class="section-label">5. Design Reflection</p>
+                <h2 id="reflection-title">Why Voice Supports Temporal Exploration</h2>
+                <p>I extended the animated commercial network from Lab 7 with browser-based voice recognition. Spoken commands control playback, move forward or backward through time, open a requested day, reset the network, and highlight a named company. These actions support temporal navigation and focused inspection while allowing the user to keep attention on the changing network instead of repeatedly locating a small control. Voice is appropriate because the command vocabulary is short, discrete, and mapped to functions already used by the buttons and slider.</p>
+                <p>The interface displays its listening state, recognized transcript, and interpreted action so errors are visible rather than silent. Recognition may still fail because of browser support, microphone permission, background noise, pronunciation, or an unexpected phrase. Therefore, the microphone starts only after an explicit button press, stops after one attempt, and never replaces the conventional Play, Pause, Reset, slider, mouse, keyboard, drag, and tooltip controls.</p>
+            </section>
         </section>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="../lab7/lab7.js?v=1"></script>
+    <script src="lab10.js?v=1"></script>
 </body>
 </html>

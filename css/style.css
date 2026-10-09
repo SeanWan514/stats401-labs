@@ -884,3 +884,52 @@ p {
 @media (max-width: 500px) {
     .lab9-stat-grid { grid-template-columns: 1fr; }
 }
+
+/* Lab 10: novel voice interaction */
+.lab10-page { width: min(1280px, calc(100% - 32px)); }
+.lab10-section { margin-top: 44px; }
+.lab10-summary { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; margin: 22px 0 0; }
+.lab10-summary span { display: grid; gap: 5px; min-height: 82px; align-content: center; padding: 13px; color: var(--muted); text-align: center; background: #fff7fa; border: 1px solid var(--border); border-radius: 10px; }
+.lab10-summary strong { color: var(--accent-dark); }
+.voice-panel { margin-top: 20px; padding: 20px; background: linear-gradient(145deg, #fff7fa, #fffdfd); border: 1px solid var(--border); border-radius: 14px; box-shadow: 0 10px 30px rgba(112, 27, 63, .06); }
+.voice-panel-header { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+.voice-buttons { display: flex; flex-wrap: wrap; gap: 9px; }
+.voice-buttons button { min-height: 43px; padding: 9px 14px; color: #fff; background: var(--accent-dark); border: 1px solid var(--accent-dark); border-radius: 8px; cursor: pointer; font: inherit; font-weight: 850; }
+.voice-buttons button:nth-child(2), .voice-buttons button:nth-child(3) { color: var(--accent-dark); background: #fff; }
+.voice-buttons button:hover:not(:disabled), .voice-buttons button:focus-visible:not(:disabled) { color: #fff; background: var(--accent); outline: 3px solid rgba(195, 47, 108, .17); outline-offset: 2px; }
+.voice-buttons button:disabled { cursor: not-allowed; opacity: .45; }
+.voice-support { max-width: 390px; margin: 0; color: #326b4d; font-size: .88rem; font-weight: 750; line-height: 1.5; }
+.voice-support.unsupported { color: #9a3f4d; }
+.voice-feedback { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 18px 0; }
+.voice-feedback > div { display: grid; min-height: 90px; align-content: center; gap: 6px; padding: 14px 16px; background: #fff; border: 1px solid var(--border); border-radius: 10px; }
+.voice-feedback span { color: var(--muted); font-size: .78rem; font-weight: 850; letter-spacing: .06em; text-transform: uppercase; }
+.voice-feedback strong { color: var(--text); line-height: 1.45; overflow-wrap: anywhere; }
+.voice-feedback strong[data-tone="listening"] { color: #a61b55; }
+.voice-feedback strong[data-tone="success"] { color: #326b4d; }
+.voice-feedback strong[data-tone="error"] { color: #a33b4c; }
+.voice-command-guide { padding: 15px 17px; background: #fff1f6; border-left: 5px solid var(--accent); border-radius: 8px; }
+.voice-command-guide h3 { margin: 0 0 10px; color: var(--accent-dark); font-size: 1rem; }
+.voice-command-guide ul { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 18px; margin: 0; padding-left: 20px; color: var(--muted); }
+.voice-command-guide code { padding: 2px 5px; color: var(--accent-dark); background: #fff; border: 1px solid var(--border); border-radius: 4px; font-family: inherit; font-weight: 800; }
+.voice-privacy { margin: 15px 0 0; color: var(--muted); font-size: .9rem; line-height: 1.6; }
+.fallback-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+.fallback-grid div { display: grid; gap: 5px; padding: 15px 17px; color: var(--muted); background: #fff7fa; border: 1px solid var(--border); border-radius: 9px; line-height: 1.5; }
+.fallback-grid strong { color: var(--accent-dark); }
+.temporal-node.voice-selected circle { stroke: #111; stroke-width: 9px; filter: drop-shadow(0 0 10px rgba(195, 47, 108, .72)); }
+.temporal-node.voice-muted { opacity: .13; }
+.temporal-link.voice-selected { stroke-opacity: 1 !important; }
+.temporal-link.voice-muted { opacity: .05 !important; }
+.lab10-writing p { line-height: 1.68; }
+
+@media (max-width: 900px) {
+    .lab10-summary, .voice-feedback { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .voice-panel-header { align-items: flex-start; flex-direction: column; }
+    .voice-support { max-width: none; }
+    .voice-command-guide ul { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 640px) {
+    .lab10-summary, .voice-feedback, .voice-command-guide ul, .fallback-grid { grid-template-columns: 1fr; }
+    .voice-buttons { display: grid; width: 100%; }
+    .voice-buttons button { width: 100%; }
+}
