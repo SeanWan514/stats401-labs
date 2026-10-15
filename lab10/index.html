@@ -122,13 +122,13 @@
                 <p class="section-label">5. Design Reflection</p>
                 <h2 id="reflection-title">Why Voice Supports Temporal Exploration</h2>
                 <p>I extended the animated commercial network from Lab 7 with browser-based voice recognition. Spoken commands control playback, move forward or backward through time, open a requested day, reset the network, and highlight a named company. These actions support temporal navigation and focused inspection while allowing the user to keep attention on the changing network instead of repeatedly locating a small control. Voice is appropriate because the command vocabulary is short, discrete, and mapped to functions already used by the buttons and slider.</p>
-                <p>Testing exposed two limitations: delayed script loading could disable activation, and the original parser rejected spelled-out day numbers. Both are corrected. Simulated permission denial and unsupported-browser tests confirmed that feedback and conventional navigation remain available. Recognition still depends on microphone permission and the browser's speech service; automated command tests alone cannot establish real speech accuracy. The interface shows the transcript and resulting action, rejects unsupported phrases, and accepts both digits and number words. Listening requires an explicit button press, ends after one attempt or a timeout, and can be cancelled. Buttons, the slider, mouse, keyboard, dragging, and tooltips remain available.</p>
+                <p>Testing exposed two limitations: delayed script loading could disable activation, and the original parser rejected spelled-out day numbers. Both are corrected. A real Safari activation attempt returned a permission-denied error without producing a transcript. Automated permission-denial and unsupported-browser tests confirmed that feedback and conventional navigation remain available. Recognition depends on browser and system permissions and the speech service; simulated command tests cannot establish real speech accuracy. The interface shows the transcript and resulting action, rejects unsupported phrases, and accepts digits and number words. Listening requires an explicit button press, ends after one attempt or a timeout, and can be cancelled. Buttons, the slider, mouse, keyboard, dragging, and tooltips remain available.</p>
             </section>
         </section>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <script src="../lab7/lab7.js?v=1"></script>
-    <script src="lab10.js?v=2"></script>
+    <script src="lab10.js?v=3"></script>
 </body>
 </html>

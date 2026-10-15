@@ -135,7 +135,7 @@ function handleVoiceCommand(rawCommand) {
 
 function describeRecognitionError(errorCode) {
     const messages = {
-        "not-allowed": "Microphone permission was denied. Use the conventional controls or allow microphone access and try again.",
+        "not-allowed": "Microphone or speech-recognition permission was denied. Check this site's microphone permission and your system's speech-recognition settings, or use the conventional controls.",
         "service-not-allowed": "Speech recognition is blocked by this browser or device. Conventional controls remain available.",
         "audio-capture": "No working microphone was found. Conventional controls remain available.",
         "no-speech": "No speech was detected. Select Start Voice Control and try again.",
