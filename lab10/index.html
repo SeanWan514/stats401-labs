@@ -38,7 +38,7 @@
             <section class="lab10-section" aria-labelledby="voice-title">
                 <p class="section-label">2. Voice Interaction</p>
                 <h2 id="voice-title">Speak a Visualization Command</h2>
-                <p class="chart-description">Select <strong>Start Voice Control</strong>, approve microphone access if your browser asks, and speak one command. The microphone is never activated automatically and stops after one recognition attempt. Watch the feedback cards for the recognition state, transcript, and resulting action. If speech recognition is unsupported or unsuccessful, use the complete conventional controls in Section 3.</p>
+                <p class="chart-description">Select <strong>Start Voice Control</strong>, approve microphone access if your browser asks, and speak one command in English. Listening ends after that attempt or after 20 seconds; you can also select <strong>Cancel Listening</strong>. The microphone is never activated automatically. Watch the feedback cards for the recognition state, transcript, and resulting action. If speech recognition is unsupported or unsuccessful, use the complete conventional controls in Section 3.</p>
 
                 <div class="voice-panel">
                     <div class="voice-panel-header">
@@ -61,14 +61,14 @@
                         <ul>
                             <li><code>Play</code> or <code>Pause</code></li>
                             <li><code>Next day</code> or <code>Previous day</code></li>
-                            <li><code>Go to day 30</code> (Days 1&ndash;60)</li>
+                            <li><code>Go to day thirty</code> (Days 1&ndash;60; digits also accepted)</li>
                             <li><code>Reset</code></li>
                             <li><code>Highlight Ion Systems</code></li>
                             <li><code>Clear highlight</code></li>
                         </ul>
                     </div>
 
-                    <p class="voice-privacy"><strong>Privacy and fallback:</strong> this page does not start the microphone on load and does not intentionally store audio or transcripts. Speech availability, permission handling, and processing depend on the browser. The visualization remains fully usable without microphone permission.</p>
+                    <p class="voice-privacy"><strong>Privacy and fallback:</strong> this page does not record or save audio. The latest transcript is displayed temporarily and is not saved by this page. Your browser may send speech to its recognition service; availability, permission handling, and processing depend on the browser. Listening also stops when you leave this page. Company highlighting pauses playback, and using a navigation control clears the highlight. The visualization remains usable without microphone permission.</p>
                 </div>
             </section>
 
@@ -122,13 +122,13 @@
                 <p class="section-label">5. Design Reflection</p>
                 <h2 id="reflection-title">Why Voice Supports Temporal Exploration</h2>
                 <p>I extended the animated commercial network from Lab 7 with browser-based voice recognition. Spoken commands control playback, move forward or backward through time, open a requested day, reset the network, and highlight a named company. These actions support temporal navigation and focused inspection while allowing the user to keep attention on the changing network instead of repeatedly locating a small control. Voice is appropriate because the command vocabulary is short, discrete, and mapped to functions already used by the buttons and slider.</p>
-                <p>The interface displays its listening state, recognized transcript, and interpreted action so errors are visible rather than silent. Recognition may still fail because of browser support, microphone permission, background noise, pronunciation, or an unexpected phrase. Therefore, the microphone starts only after an explicit button press, stops after one attempt, and never replaces the conventional Play, Pause, Reset, slider, mouse, keyboard, drag, and tooltip controls.</p>
+                <p>Testing exposed two limitations: delayed script loading could disable activation, and the original parser rejected spelled-out day numbers. Both are corrected. Simulated permission denial and unsupported-browser tests confirmed that feedback and conventional navigation remain available. Recognition still depends on microphone permission and the browser's speech service; automated command tests alone cannot establish real speech accuracy. The interface shows the transcript and resulting action, rejects unsupported phrases, and accepts both digits and number words. Listening requires an explicit button press, ends after one attempt or a timeout, and can be cancelled. Buttons, the slider, mouse, keyboard, dragging, and tooltips remain available.</p>
             </section>
         </section>
     </main>
 
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <script src="../lab7/lab7.js?v=1"></script>
-    <script src="lab10.js?v=1"></script>
+    <script src="lab10.js?v=2"></script>
 </body>
 </html>
